@@ -30,6 +30,9 @@ public class Human extends MovingObject implements IAlarm, Serializable {
 
     // Current animation frame
     public int animationFrame = 0;
+    
+    // Animation direction (0-3 for right, 4-7 for left)
+    protected int animationDirection = 0;
 
     // Alarm for animation timing (transient - not serialized)
     protected transient Alarm myAlarm;
@@ -97,16 +100,40 @@ public class Human extends MovingObject implements IAlarm, Serializable {
     }
     
     /**
+     * Set the animation direction (left or right)
+     * @param isRightDirection true for right, false for left
+     */
+    public void setAnimationDirection(boolean isRightDirection) {
+        // Keep the current frame number within its set (0-3 or 4-7)
+        int frameOffset = animationFrame % 4;
+        
+        if (isRightDirection) {
+            // Right-facing animation uses frames 0-3
+            animationDirection = 0;
+            animationFrame = frameOffset;
+        } else {
+            // Left-facing animation uses frames 4-7
+            animationDirection = 4;
+            animationFrame = frameOffset + 4;
+        }
+        
+        setFrameNumber(animationFrame);
+    }
+    
+    /**
      * Handle animation timing alarm
      */
     private void handleAnimationAlarm() {
         if (inAir != 1 && isWalking) {
-            animationFrame++;
-            if (animationFrame >= 8) {
-                animationFrame = 0;
-            } else if (animationFrame >= 4) {
-                // Keep in range 4-7 for second animation set
-            }
+            // Get the base frame depending on direction (0 for right, 4 for left)
+            int baseFrame = animationDirection;
+            
+            // Calculate the next frame offset (0, 1, 2, 3)
+            int frameOffset = (animationFrame % 4);
+            frameOffset = (frameOffset + 1) % 4;
+            
+            // Set the new animation frame
+            animationFrame = baseFrame + frameOffset;
             setFrameNumber(animationFrame);
         }
         

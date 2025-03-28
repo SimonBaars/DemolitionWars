@@ -114,19 +114,15 @@ public class Player extends Human {
 		if (OnScreenButtons.dPadRight) {
 			if (this.getX() <= game.getMapWidth() && !hasCollided) {
 				addToMomentum(90, movementSpeed);
-				if (animationFrame > 3) {
-					animationFrame -= 4;
-					setFrameNumber(animationFrame);
-				}
+				// Set animation to face right
+				setAnimationDirection(true);
 			}
 			isWalking = true;
 		} else if (OnScreenButtons.dPadLeft) {
 			if (this.getX() >= 0 && !hasCollided) {
 				addToMomentum(270, movementSpeed);
-				if (animationFrame < 4) {
-					animationFrame += 4;
-					setFrameNumber(animationFrame);
-				}
+				// Set animation to face left
+				setAnimationDirection(false);
 			}
 			isWalking = true;
 		} else {
