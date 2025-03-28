@@ -59,67 +59,90 @@ public class MovingObject extends MoveableGameObject implements Serializable {
     }
 
     /**
-    * Makes everything fall :). Uses optimized collisions.
+     * Applies gravity to the object using optimized collision detection
      */
     protected void gravity() {
         boolean fall = true;
         airtime++;
         
-        // Skip unnecessary checks if no nearby objects
+        // Early exit if no nearby objects to check against
         if (nearbyObjects.isEmpty()) {
             addToMomentum(180, airtime);
             return;
         }
         
-        // Maximum iterations to prevent infinite loops but increased for better detection
-        int maxIterations = 10; // Increased from 5 to 10
+        // Parameters for collision detection
+        final int maxIterations = 10;
+        final int collisionPointOffset = 10;
         int iterations = 0;
         
-        while(iterations < maxIterations) {
+        while (iterations < maxIterations) {
             iterations++;
             fall = true;
             
-            int sizeY = this.getY() + airtime + (6 * game.tileSize);
-            if(this instanceof Block) {
+            // Calculate vertical position based on current airtime
+            int sizeY = getY() + airtime + (6 * game.tileSize);
+            if (this instanceof Block) {
                 sizeY -= 3 * game.tileSize;
             }
             
-            int checkX = this.getX() + 25;
+            // Check collision at multiple points along the base
+            int checkX = getX() + 25;
             
-            // Expanded collision check radius
+            // Check collisions against nearby blocks
             for (MovingObject object : nearbyObjects) {
-                if(object instanceof Block) {
-                    Block block = (Block)object;
-                    if (!game.imageLoader.hasNoCollision(block) || block instanceof BlockLadder) {
-                        // Check multiple points for better collision detection
-                        if (block.collidesWith(checkX, sizeY) || 
-                            block.collidesWith(checkX - 10, sizeY) || 
-                            block.collidesWith(checkX + 10, sizeY)) {
-                            fall = false;
-                            hasCollided = false;
-                            if (inAir == 2) { 
-                                inAir = 0;
-                            }
-                            break;
-                        }
+                if (!(object instanceof Block)) {
+                    continue;
+                }
+                
+                Block block = (Block)object;
+                if (game.imageLoader.hasNoCollision(block) && !(block instanceof BlockLadder)) {
+                    continue;
+                }
+                
+                // Check multiple points for better collision detection
+                if (checkCollisionWithBlock(block, checkX, sizeY, collisionPointOffset)) {
+                    fall = false;
+                    hasCollided = false;
+                    if (inAir == 2) { 
+                        inAir = 0;
                     }
+                    break;
                 }
             }
             
-            if(!fall && airtime >= 1) {
+            // Adjust airtime if collision detected
+            if (!fall && airtime >= 1) {
                 airtime--;
             } else {
                 break;
             }
         }
         
+        // Apply momentum based on airtime
+        applyGravityMomentum();
+    }
+    
+    /**
+     * Checks collision with a block at multiple points
+     */
+    private boolean checkCollisionWithBlock(Block block, int centerX, int sizeY, int offset) {
+        return block.collidesWith(centerX, sizeY) || 
+               block.collidesWith(centerX - offset, sizeY) || 
+               block.collidesWith(centerX + offset, sizeY);
+    }
+    
+    /**
+     * Applies appropriate momentum based on airtime
+     */
+    private void applyGravityMomentum() {
         if (airtime > 0) {
             addToMomentum(180, airtime);
         } else {
-            if(!(this instanceof Bot)) {
+            if (!(this instanceof Bot)) {
                 addToMomentum(180, 0);
             }
-            if(this instanceof Obtainables) {
+            if (this instanceof Obtainables) {
                 inAir = 0;
             }
         }
