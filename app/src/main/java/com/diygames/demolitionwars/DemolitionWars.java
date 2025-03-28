@@ -166,21 +166,19 @@ public class DemolitionWars extends GameEngine {
     * Reset the game to initial state
     */
     public void resetGame() {
-        // Clear old objects
-        for(MovingObject object : world.blocks){
-            deleteGameObject(object);
-        }
-        for(Human human : world.humans){
-            deleteGameObject(human);
+        // Stop processing to avoid concurrent modification issues
+        gameThread.stopRunning();
+        
+        // Clear all game objects from the engine
+        for (GameObject obj : items.toArray(new GameObject[0])) {
+            deleteGameObject(obj);
         }
         
-        // Clear old collections
-        world.blocks.clear();
-        world.humans.clear();
-        
-        // Clear items from game engine
+        // Clear collections
         items.clear();
         newItems.clear();
+        world.blocks.clear();
+        world.humans.clear();
         
         // Create a new world
         world = new World(this);
@@ -196,6 +194,9 @@ public class DemolitionWars extends GameEngine {
         if (gameMenu != null && gameMenu.isMenuOpen()) {
             gameMenu.closeMenu();
         }
+        
+        // Restart game thread
+        startThread();
     }
 
 
