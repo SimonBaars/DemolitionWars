@@ -160,6 +160,22 @@ public class DemolitionWars extends GameEngine {
     * Reset the game to initial state
     */
     public void resetGame() {
+        // Clear old objects
+        for(MovingObject object : world.blocks){
+            deleteGameObject(object);
+        }
+        for(Human human : world.humans){
+            deleteGameObject(human);
+        }
+        
+        // Clear old collections
+        world.blocks.clear();
+        world.humans.clear();
+        
+        // Clear items from game engine
+        items.clear();
+        newItems.clear();
+        
         // Create a new world
         world = new World(this);
         gameOver = false;
