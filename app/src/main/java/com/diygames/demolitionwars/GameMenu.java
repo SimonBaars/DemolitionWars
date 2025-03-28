@@ -173,7 +173,7 @@ public class GameMenu implements Serializable {
     private void loadGame() {
         try {
             // Stop the game thread to avoid concurrent modifications
-            game.gameThread.stopRunning();
+            game.pause();
             
             // Clear existing game objects
             for (GameObject obj : game.items.toArray(new GameObject[0])) {
@@ -219,7 +219,7 @@ public class GameMenu implements Serializable {
             closeMenu();
             
             // Restart the game thread
-            game.startThread();
+            game.resume();
         } catch (Exception e) {
             e.printStackTrace();
             // If loading fails, create a new world

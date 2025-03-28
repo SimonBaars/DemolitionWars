@@ -6,6 +6,7 @@ import android.gameengine.icadroids.engine.Viewport;
 import android.gameengine.icadroids.input.MotionSensor;
 import android.gameengine.icadroids.input.OnScreenButtons;
 import android.gameengine.icadroids.input.TouchInput;
+import android.gameengine.icadroids.objects.GameObject;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.util.DisplayMetrics;
@@ -166,8 +167,8 @@ public class DemolitionWars extends GameEngine {
     * Reset the game to initial state
     */
     public void resetGame() {
-        // Stop processing to avoid concurrent modification issues
-        gameThread.stopRunning();
+        // Stop processing temporarily
+        pause();
         
         // Clear all game objects from the engine
         for (GameObject obj : items.toArray(new GameObject[0])) {
@@ -195,8 +196,8 @@ public class DemolitionWars extends GameEngine {
             gameMenu.closeMenu();
         }
         
-        // Restart game thread
-        startThread();
+        // Restart game processing
+        resume();
     }
 
 
