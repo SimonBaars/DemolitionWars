@@ -71,8 +71,8 @@ public class MovingObject extends MoveableGameObject implements Serializable {
             return;
         }
         
-        // Maximum iterations to prevent infinite loops
-        int maxIterations = 5;
+        // Maximum iterations to prevent infinite loops but increased for better detection
+        int maxIterations = 10; // Increased from 5 to 10
         int iterations = 0;
         
         while(iterations < maxIterations) {
@@ -86,12 +86,15 @@ public class MovingObject extends MoveableGameObject implements Serializable {
             
             int checkX = this.getX() + 25;
             
-            // Optimized check that only looks at nearby objects that are blocks
+            // Expanded collision check radius
             for (MovingObject object : nearbyObjects) {
                 if(object instanceof Block) {
                     Block block = (Block)object;
                     if (!game.imageLoader.hasNoCollision(block) || block instanceof BlockLadder) {
-                        if (block.collidesWith(checkX, sizeY)) {
+                        // Check multiple points for better collision detection
+                        if (block.collidesWith(checkX, sizeY) || 
+                            block.collidesWith(checkX - 10, sizeY) || 
+                            block.collidesWith(checkX + 10, sizeY)) {
                             fall = false;
                             hasCollided = false;
                             if (inAir == 2) { 
@@ -223,7 +226,7 @@ public class MovingObject extends MoveableGameObject implements Serializable {
         
         int playerX = getX();
         int playerY = getY();
-        int maxDistance = 30 * game.tileSize;
+        int maxDistance = 40 * game.tileSize; // Increased from 30 to 40 for better collision detection
         
         // Quick bounding box check for better performance
         int minX = playerX - maxDistance;
@@ -238,10 +241,8 @@ public class MovingObject extends MoveableGameObject implements Serializable {
                 
                 // Simple bounding box check first (much faster than full distance calculation)
                 if(objX >= minX && objX <= maxX && objY >= minY && objY <= maxY) {
-                    // Only perform actual distance check if object is within bounding box
-                    if(distanceToThisObject(object) < maxDistance) {
-                        nearbyObjects.add(object);
-                    }
+                    // Include all objects in bounding box to avoid missing collisions
+                    nearbyObjects.add(object);
                 }
             }
         }
