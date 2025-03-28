@@ -13,6 +13,7 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.diygames.Humans.Human;
 import com.diygames.Humans.Player;
 
 /**
