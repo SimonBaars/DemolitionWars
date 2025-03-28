@@ -1,5 +1,6 @@
 package com.diygames.demolitionwars;
 
+import android.content.Intent;
 import android.gameengine.icadroids.dashboard.DashboardTextView;
 import android.gameengine.icadroids.engine.GameEngine;
 import android.gameengine.icadroids.engine.Viewport;
@@ -71,6 +72,10 @@ public class DemolitionWars extends GameEngine {
 
     // Game menu
     private GameMenu gameMenu;
+    
+    // Performance optimization
+    private long lastFrameTime = 0;
+    private static final long FRAME_TIME_THRESHOLD = 16; // Target ~60fps
 	
 	/**
 	 * Initialize the game
@@ -92,6 +97,9 @@ public class DemolitionWars extends GameEngine {
 
         // Create UI elements
         createDashboards();
+        
+        // Show welcome message
+        showMessage("Welcome to Demolition Wars!");
     }
 
     /**
@@ -151,6 +159,15 @@ public class DemolitionWars extends GameEngine {
         currentMessage = message;
         messageDisplayTime = System.currentTimeMillis();
     }
+    
+    /**
+     * Restart the application
+     */
+    public void restartApp() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
 
     /**
      * Detect screen size and calculate scaling factors
@@ -192,6 +209,9 @@ public class DemolitionWars extends GameEngine {
         hideAllObjects();
         gameOver = true;
         gameOverString = "Game Over\n\nPress B to reset";
+        
+        // Vibrate to indicate game over
+        vibrate(500);
     }
 
     /**
@@ -201,6 +221,9 @@ public class DemolitionWars extends GameEngine {
         hideAllObjects();
         gameOver = true;
         gameOverString = "You Won!!!\n\nPress B to reset";
+        
+        // Vibrate to indicate win
+        vibrate(300);
     }
     
     /**
@@ -211,8 +234,8 @@ public class DemolitionWars extends GameEngine {
             object.setVisibility(false);
         }
         
-        if (!world.humans.isEmpty()) {
-            world.humans.get(0).setVisibility(false);
+        for (Human human : world.humans) {
+            human.setVisibility(false);
         }
     }
     
@@ -241,6 +264,9 @@ public class DemolitionWars extends GameEngine {
             gameMenu.closeMenu();
         }
         
+        // Show message
+        showMessage("Game Reset");
+        
         // Restart game processing
         resume();
     }
@@ -266,6 +292,13 @@ public class DemolitionWars extends GameEngine {
 	 */
 	@Override
 	public void update() {
+        // Throttle frame rate for consistent experience
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastFrameTime < FRAME_TIME_THRESHOLD) {
+            return;
+        }
+        lastFrameTime = currentTime;
+        
         super.update();
         
         // Handle menu button
@@ -375,6 +408,10 @@ public class DemolitionWars extends GameEngine {
         }
         
         // Get player for display info
+        if (world.humans.isEmpty()) {
+            return;
+        }
+        
         Player player = (Player)world.humans.get(0);
         
         if (player.inShop) {

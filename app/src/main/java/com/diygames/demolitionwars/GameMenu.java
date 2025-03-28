@@ -3,10 +3,6 @@ package com.diygames.demolitionwars;
 import android.gameengine.icadroids.objects.GameObject;
 import com.diygames.Humans.Human;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
@@ -21,10 +17,8 @@ public class GameMenu implements Serializable {
     public static final int MENU_OPEN = 1;
     
     // Menu options
-    public static final int OPTION_SAVE = 0;
-    public static final int OPTION_LOAD = 1;
-    public static final int OPTION_RESET = 2;
-    public static final int OPTION_EXIT = 3;
+    public static final int OPTION_RESET = 0;
+    public static final int OPTION_EXIT = 1;
     
     // Current menu state
     private int menuState = MENU_CLOSED;
@@ -36,7 +30,7 @@ public class GameMenu implements Serializable {
     private transient DemolitionWars game;
     
     // Menu options array
-    private String[] menuOptions = {"Save", "Load", "Reset", "Exit"};
+    private String[] menuOptions = {"Reset", "Exit"};
     
     /**
      * Create a new game menu
@@ -136,12 +130,6 @@ public class GameMenu implements Serializable {
         }
         
         switch (selectedOption) {
-            case OPTION_SAVE:
-                saveGame();
-                break;
-            case OPTION_LOAD:
-                loadGame();
-                break;
             case OPTION_RESET:
                 resetGame();
                 break;
@@ -152,109 +140,17 @@ public class GameMenu implements Serializable {
     }
     
     /**
-     * Save the current game state
-     */
-    private void saveGame() {
-        try {
-            FileOutputStream fos = new FileOutputStream(game.getFileStreamPath("savegame.dat"));
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(game.world);
-            oos.close();
-            fos.close();
-            closeMenu();
-            
-            // Show "Game Saved" message
-            game.showSaveMessage();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    /**
-     * Load a saved game
-     */
-    private void loadGame() {
-        try {
-            // Check if save file exists
-            if (!game.getFileStreamPath("savegame.dat").exists()) {
-                game.showMessage("No saved game found");
-                return;
-            }
-            
-            // Stop the game thread to avoid concurrent modifications
-            game.pause();
-            
-            // Clear existing game objects
-            for (GameObject obj : game.items.toArray(new GameObject[0])) {
-                game.deleteGameObject(obj);
-            }
-            
-            // Clear collections
-            game.items.clear();
-            game.newItems.clear();
-            
-            // Load the world from file
-            FileInputStream fis = new FileInputStream(game.getFileStreamPath("savegame.dat"));
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            World loadedWorld = (World) ois.readObject();
-            ois.close();
-            fis.close();
-            
-            // Set the loaded world
-            game.world = loadedWorld;
-            game.world.game = game; // Restore transient reference
-            
-            // Recreate game objects - first recreate blocks
-            for (MovingObject obj : game.world.blocks) {
-                if (obj != null) {
-                    game.addGameObject(obj, obj.getX(), obj.getY());
-                    obj.game = game; // Restore transient reference
-                }
-            }
-            
-            // Then recreate humans (to ensure they're rendered on top)
-            for (Human human : game.world.humans) {
-                if (human != null) {
-                    game.addGameObject(human, human.getX(), human.getY(), 1);
-                    human.game = game; // Restore transient reference
-                    human.initAlarm(); // Reinitialize alarms
-                }
-            }
-            
-            // Set player
-            if (!game.world.humans.isEmpty()) {
-                game.setPlayer(game.world.humans.get(0));
-            }
-            
-            // Set game state
-            game.gameOver = false;
-            
-            // Make sure collisions are optimized
-            game.world.optimizeCollisionsForAllHumans();
-            
-            // Close the menu
-            closeMenu();
-            
-            // Show message that game was loaded
-            game.showMessage("Game Loaded");
-            
-            // Restart the game thread
-            game.resume();
-        } catch (Exception e) {
-            e.printStackTrace();
-            game.showMessage("Error loading game");
-            // If loading fails, create a new world
-            resetGame();
-        }
-    }
-    
-    /**
-     * Reset the game to initial state
+     * Reset the game by restarting the application
      */
     private void resetGame() {
-        // Use the DemolitionWars resetGame method for proper cleanup
-        game.resetGame();
+        // Show a message about restarting
+        game.showMessage("Restarting...");
+        
+        // Close the menu
         closeMenu();
+        
+        // Use the Android Intent mechanism to restart the app (added to DemolitionWars)
+        game.restartApp();
     }
     
     /**
