@@ -1,5 +1,8 @@
 package com.diygames.demolitionwars;
 
+import android.gameengine.icadroids.objects.GameObject;
+import com.diygames.Humans.Human;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -169,15 +172,58 @@ public class GameMenu implements Serializable {
      */
     private void loadGame() {
         try {
+            // Stop the game thread to avoid concurrent modifications
+            game.gameThread.stopRunning();
+            
+            // Clear existing game objects
+            for (GameObject obj : game.items.toArray(new GameObject[0])) {
+                game.deleteGameObject(obj);
+            }
+            
+            // Clear collections
+            game.items.clear();
+            game.newItems.clear();
+            
+            // Load the world from file
             FileInputStream fis = new FileInputStream(game.getFileStreamPath("savegame.dat"));
             ObjectInputStream ois = new ObjectInputStream(fis);
-            game.world = (World) ois.readObject();
-            game.world.game = game; // Restore transient reference
+            World loadedWorld = (World) ois.readObject();
             ois.close();
             fis.close();
+            
+            // Set the loaded world
+            game.world = loadedWorld;
+            game.world.game = game; // Restore transient reference
+            
+            // Recreate game objects
+            for (MovingObject obj : game.world.blocks) {
+                game.addGameObject(obj, obj.getX(), obj.getY());
+                obj.game = game; // Restore transient reference
+            }
+            
+            for (Human human : game.world.humans) {
+                game.addGameObject(human, human.getX(), human.getY());
+                human.game = game; // Restore transient reference
+                human.initAlarm(); // Reinitialize alarms
+            }
+            
+            // Set player
+            if (!game.world.humans.isEmpty()) {
+                game.setPlayer(game.world.humans.get(0));
+            }
+            
+            // Set game state
+            game.gameOver = false;
+            
+            // Close the menu
             closeMenu();
+            
+            // Restart the game thread
+            game.startThread();
         } catch (Exception e) {
             e.printStackTrace();
+            // If loading fails, create a new world
+            resetGame();
         }
     }
     
@@ -185,8 +231,8 @@ public class GameMenu implements Serializable {
      * Reset the game to initial state
      */
     private void resetGame() {
-        game.world = new World(game);
-        game.gameOver = false;
+        // Use the DemolitionWars resetGame method for proper cleanup
+        game.resetGame();
         closeMenu();
     }
     
