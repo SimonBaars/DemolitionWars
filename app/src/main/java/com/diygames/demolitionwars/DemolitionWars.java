@@ -32,6 +32,7 @@ public class DemolitionWars extends GameEngine {
     private DashboardTextView healthDisplay;
     private DashboardTextView shopDisplay;
     private DashboardTextView gameOverDisplay;
+    private DashboardTextView menuDisplay;
 
     public String shopDisplayString = "";
 
@@ -46,7 +47,13 @@ public class DemolitionWars extends GameEngine {
 
     public SpriteLoader imageLoader = new SpriteLoader();
 
-    public boolean gameOver=false;
+    public boolean gameOver = false;
+    
+    // For handling the start button
+    private boolean startButtonPressed = false;
+
+    // Game menu
+    private GameMenu gameMenu;
 
     String gameOverString = "";
 	
@@ -71,6 +78,7 @@ public class DemolitionWars extends GameEngine {
 		//createTileEnvironment();
 
         world = new World(this);
+        gameMenu = new GameMenu(this);
 
         setPlayerPositionOnScreen(2,2);
 
@@ -87,6 +95,8 @@ public class DemolitionWars extends GameEngine {
         shopDisplay = createNewDisplay(10,10, 18);
 
         gameOverDisplay = createNewDisplay((int)(700 * scaleFactorX), (int)(200 * scaleFactorY), 30);
+        
+        menuDisplay = createNewDisplay((int)(screenWidth/2 - 100), (int)(screenHeight/2 - 150), 24);
     }
 
     /**
@@ -131,7 +141,7 @@ public class DemolitionWars extends GameEngine {
         }
         world.humans.get(0).setVisibility(false);
         gameOver=true;
-        gameOverString = "Game Over";
+        gameOverString = "Game Over\n\nPress B to reset";
     }
 
     /**
@@ -143,7 +153,20 @@ public class DemolitionWars extends GameEngine {
         }
         world.humans.get(0).setVisibility(false);
         gameOver=true;
-        gameOverString = "You Won!!!";
+        gameOverString = "You Won!!!\n\nPress B to reset";
+    }
+    
+    /**
+    * Reset the game to initial state
+    */
+    public void resetGame() {
+        world = new World(this);
+        gameOver = false;
+        
+        // Set player object
+        setPlayer(world.humans.get(0));
+        
+        world.optimizeCollisionsForAllHumans();
     }
 
 
@@ -155,29 +178,74 @@ public class DemolitionWars extends GameEngine {
 	@Override
 	public void update() {
         super.update();
+        
+        // Handle start button press
+        if (OnScreenButtons.start && !startButtonPressed) {
+            gameMenu.toggleMenu();
+            startButtonPressed = true;
+        } else if (!OnScreenButtons.start) {
+            startButtonPressed = false;
+        }
+        
+        // Handle menu navigation when menu is open
+        if (gameMenu.isMenuOpen()) {
+            if (OnScreenButtons.dPadUp && !startButtonPressed) {
+                gameMenu.moveSelectionUp();
+                startButtonPressed = true;
+            } else if (OnScreenButtons.dPadDown && !startButtonPressed) {
+                gameMenu.moveSelectionDown();
+                startButtonPressed = true;
+            } else if (OnScreenButtons.buttonA && !startButtonPressed) {
+                gameMenu.selectOption();
+                startButtonPressed = true;
+            } else if (!OnScreenButtons.dPadUp && !OnScreenButtons.dPadDown && !OnScreenButtons.buttonA) {
+                startButtonPressed = false;
+            }
+            
+            // Display menu
+            this.menuDisplay.setTextString(gameMenu.getMenuText());
+            
+            // Hide other displays
+            this.moneyDisplay.setTextString("");
+            this.inventoryDisplay.setTextString("");
+            this.healthDisplay.setTextString("");
+            this.shopDisplay.setTextString("");
+            this.gameOverDisplay.setTextString("");
+            
+            return;
+        } else {
+            this.menuDisplay.setTextString("");
+        }
+        
+        // Handle reset in game over screen
+        if (gameOver && OnScreenButtons.buttonB) {
+            resetGame();
+            return;
+        }
+        
         Player player = (Player)world.humans.get(0);
-            if(gameOver) {
+        if(gameOver) {
+            this.moneyDisplay.setTextString("");
+            this.inventoryDisplay.setTextString("");
+            this.healthDisplay.setTextString("");
+            this.shopDisplay.setTextString("");
+            this.gameOverDisplay.setTextString(gameOverString);
+        } else {
+            if (player.inShop) {
                 this.moneyDisplay.setTextString("");
                 this.inventoryDisplay.setTextString("");
                 this.healthDisplay.setTextString("");
-                this.shopDisplay.setTextString("");
-                this.gameOverDisplay.setTextString(gameOverString);
+                this.shopDisplay.setTextString(shopDisplayString);
             } else {
-                if (player.inShop) {
-                    this.moneyDisplay.setTextString("");
-                    this.inventoryDisplay.setTextString("");
-                    this.healthDisplay.setTextString("");
-                    this.shopDisplay.setTextString(shopDisplayString);
+                this.moneyDisplay.setTextString("Money: " + player.money + " - ");
+                if (player.inventory.size() > 0) {
+                    this.inventoryDisplay.setTextString("Selected Item: " + (player.selectedItem + 1) + ". " + player.inventory.get(player.selectedItem).name + " - ");
                 } else {
-                    this.moneyDisplay.setTextString("Money: " + player.money + " - ");
-                    if (player.inventory.size() > 0) {
-                        this.inventoryDisplay.setTextString("Selected Item: " + (player.selectedItem + 1) + ". " + player.inventory.get(player.selectedItem).name + " - ");
-                    } else {
-                        this.inventoryDisplay.setTextString("Selected Item: none -");
-                    }
-                    this.healthDisplay.setTextString("Health: " + player.health + "%");
-                    this.shopDisplay.setTextString("");
+                    this.inventoryDisplay.setTextString("Selected Item: none -");
                 }
+                this.healthDisplay.setTextString("Health: " + player.health + "%");
+                this.shopDisplay.setTextString("");
             }
+        }
     }
 }

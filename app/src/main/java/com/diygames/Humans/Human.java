@@ -7,12 +7,15 @@ import com.diygames.demolitionwars.MovingObject;
 import com.diygames.demolitionwars.Obtainables;
 import com.diygames.demolitionwars.DemolitionWars;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Simon Baars on 3/24/2015.
  */
-public class Human extends MovingObject implements IAlarm{
+public class Human extends MovingObject implements IAlarm, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	public boolean team;
 
@@ -22,7 +25,7 @@ public class Human extends MovingObject implements IAlarm{
 
     public int animationFrame=0;
 
-    protected Alarm myAlarm;
+    protected transient Alarm myAlarm;
 
     protected boolean isWalking;
 
@@ -36,6 +39,13 @@ public class Human extends MovingObject implements IAlarm{
         this.team=team;
         setDirection(90);
         setFriction(0.05);
+        initAlarm();
+    }
+    
+    /**
+     * Initialize alarm - called in constructor and after deserialization
+     */
+    public void initAlarm() {
         myAlarm = new Alarm(0, 6, this);
         myAlarm.startAlarm();
     }

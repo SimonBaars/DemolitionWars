@@ -10,12 +10,15 @@ import com.diygames.Humans.King;
 import com.diygames.Humans.Player;
 import com.diygames.Items.ItemBullet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Simon Baars on 3/24/2015.
  */
-public class MovingObject extends MoveableGameObject {
+public class MovingObject extends MoveableGameObject implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private ArrayList<Double> momentum = new ArrayList<Double>();
 
@@ -28,12 +31,15 @@ public class MovingObject extends MoveableGameObject {
     public ArrayList<MovingObject> nearbyObjects = new ArrayList<MovingObject>();
 
     protected int[] lastCollisionScanPosition = new int[2];
+    
+    public transient DemolitionWars game;
 
     /**
     * Init the moving object
      */
     public MovingObject(DemolitionWars game){
         super(game);
+        this.game = game;
         autoMomentumAddition[0]=0;
     }
 
