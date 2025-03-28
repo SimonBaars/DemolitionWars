@@ -372,4 +372,3 @@ public class DemolitionWars extends GameEngine {
         shopDisplay.setTextString("");
     }
 }
-}
