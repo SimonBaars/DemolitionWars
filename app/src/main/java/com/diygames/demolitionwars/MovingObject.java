@@ -178,9 +178,29 @@ public class MovingObject extends MoveableGameObject implements Serializable {
         nearbyObjects.clear();
         lastCollisionScanPosition[0]=getX();
         lastCollisionScanPosition[1]=getY();
+        
+        int playerX = getX();
+        int playerY = getY();
+        int maxDistance = 30 * game.tileSize;
+        
+        // Quick bounding box check for better performance
+        int minX = playerX - maxDistance;
+        int maxX = playerX + maxDistance;
+        int minY = playerY - maxDistance;
+        int maxY = playerY + maxDistance;
+        
         for(MovingObject object : game.world.blocks){
-            if(distanceToThisObject(object)<(30*game.tileSize) && object instanceof Obtainables){
-                nearbyObjects.add(object);
+            if(object instanceof Obtainables){
+                int objX = object.getX();
+                int objY = object.getY();
+                
+                // Simple bounding box check first (much faster than full distance calculation)
+                if(objX >= minX && objX <= maxX && objY >= minY && objY <= maxY) {
+                    // Only perform actual distance check if object is within bounding box
+                    if(distanceToThisObject(object) < maxDistance) {
+                        nearbyObjects.add(object);
+                    }
+                }
             }
         }
     }
