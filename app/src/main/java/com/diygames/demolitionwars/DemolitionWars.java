@@ -69,6 +69,10 @@ public class DemolitionWars extends GameEngine {
     private String currentMessage = "";
     private long messageDisplayTime = 0;
     private static final long MESSAGE_DURATION = 2000; // 2 seconds
+    
+    // Time control
+    private float timeScale = 1.0f;
+    private long lastRealFrameTime = 0;
 
     // Game menu
     private GameMenu gameMenu;
@@ -158,6 +162,22 @@ public class DemolitionWars extends GameEngine {
     public void showMessage(String message) {
         currentMessage = message;
         messageDisplayTime = System.currentTimeMillis();
+    }
+    
+    /**
+     * Set the game time scale (speed)
+     * @param scale Time scale factor (1.0 = normal, 0.5 = half speed, 2.0 = double speed)
+     */
+    public void setTimeScale(float scale) {
+        this.timeScale = scale;
+    }
+    
+    /**
+     * Get the current time scale
+     * @return Current time scale factor
+     */
+    public float getTimeScale() {
+        return timeScale;
     }
     
     /**
@@ -292,11 +312,19 @@ public class DemolitionWars extends GameEngine {
 	 */
 	@Override
 	public void update() {
-        // Throttle frame rate for consistent experience
+        // Throttle frame rate for consistent experience, respecting time scale
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastFrameTime < FRAME_TIME_THRESHOLD) {
+        long elapsedRealTime = currentTime - lastRealFrameTime;
+        
+        // Calculate scaled time (adjusted by timeScale)
+        long scaledElapsedTime = (long)(elapsedRealTime * timeScale);
+        
+        // Only update if enough scaled time has passed
+        if (scaledElapsedTime < FRAME_TIME_THRESHOLD) {
             return;
         }
+        
+        lastRealFrameTime = currentTime;
         lastFrameTime = currentTime;
         
         super.update();

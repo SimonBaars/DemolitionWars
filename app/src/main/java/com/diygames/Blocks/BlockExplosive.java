@@ -44,9 +44,17 @@ public abstract class BlockExplosive extends Block implements IAlarm {
 
     /**
      * Set the explosive to explode in timeTillExplosion steps
+     * Doubles explosion time for all bombs except grenades
      */
     public void setExplosionTimer(){
-        explosionTime = new Alarm(3,timeTillExplosion,this);
+        int explosionDelay = timeTillExplosion;
+        
+        // Double explosion timer for all bombs except for grenades
+        if (!(this instanceof BlockGrenade)) {
+            explosionDelay *= 2;
+        }
+        
+        explosionTime = new Alarm(3, explosionDelay, this);
         explosionTime.startAlarm();
         if(this instanceof BlockGrenade){
             BlockGrenade thisObject = (BlockGrenade)this;
@@ -117,42 +125,30 @@ public abstract class BlockExplosive extends Block implements IAlarm {
      * @param object
      * @return
      */
-    public double degreesToBomb(MovingObject object){
-        if(getX()>=object.getX() && getY()>=object.getY()){
-            double differenceX = object.getX()-getX();
-            double differenceY = object.getY()-getY();
-            double corner=Math.toDegrees(Math.atan(differenceX/differenceY));
-            return invertInt(corner+270, (90/2)+270);
-        } else if(getX()>=object.getX() && getY()<=object.getY()){
-            double differenceX = getX()-object.getX();
-            double differenceY = getY()-object.getY();
-            double corner=Math.toDegrees(Math.atan(differenceX/differenceY));
-            return invertInt(corner+90, (90/2)+90);
-        } else if(getX()<=object.getX() && getY()>=object.getY()){
-            double differenceX = object.getX()-getX();
-            double differenceY = object.getY()-getY();
-            double corner=Math.toDegrees(Math.atan(differenceX/differenceY));
-            return invertInt(corner-90,(90/2)-90);
-        } else if(getX()<=object.getX() && getY()<=object.getY()){
-            double differenceX = getX()-object.getX();
-            double differenceY = getY()-object.getY();
-            double corner=Math.toDegrees(Math.atan(differenceX/differenceY));
-            return invertInt(corner+90, (90/2)+90);
-        }
-        return 0;
+	private double degreesToBomb(MovingObject object) {
+	    if (getY() < object.getY()) {
+	        return 180 + Math.toDegrees(Math.atan2(getY() - object.getY(), getX() - object.getX()));
+	    } else {
+	        return Math.toDegrees(Math.atan2(getY() - object.getY(), getX() - object.getX()));
+	    }
+	}
+
+    /**
+     * Calculate a distance to this object
+     * @param object The object to calculate the distance to
+     * @return The distance to this object
+     */
+    public double distanceToThisObject(MovingObject object){
+        return Math.sqrt(Math.pow(getY()-object.getY(), 2) + Math.pow(getX()-object.getX(), 2));
     }
 
     /**
-     * Invert an integer. For example, if the mid is 0 and the number is 10 it becomes -10. Second example: if the mid is 50 and the number is 25 it becomes 75. Extremely useful with all the mathematical stuff included in this file :D.
-     * @param number
-     * @param mid
+     * Calculates a value that is inverted when distanceOf is not exactly matching the invertOf
+     * @param distanceOf
+     * @param invertOf
      * @return
      */
-    public double invertInt(double number, double mid){
-        if(number>mid){
-            return number-(2*(number-mid));
-        }
-        return number+(2*(mid-number));
+    public double invertInt(double distanceOf, double invertOf){
+        return Math.max(0,invertOf-distanceOf);
     }
-
 }

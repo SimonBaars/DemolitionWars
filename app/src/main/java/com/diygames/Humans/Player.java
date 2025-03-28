@@ -32,9 +32,12 @@ public class Player extends Human {
 	private long lastButtonPressTime = 0;
 	private static final long BUTTON_COOLDOWN = 200; // 200ms cooldown between button presses
 	
-	// Running speed factors
-	private static final float NORMAL_SPEED = 10f;
-	private static final float RUNNING_SPEED = 20f;
+	// Running speed factors (increased by 1.5x)
+	private static final float NORMAL_SPEED = 15f;    // Was 10f
+	private static final float RUNNING_SPEED = 30f;   // Was 20f
+	
+	// Jump parameters (increased height by 1.1x)
+	private static final float JUMP_FORCE = 22f;      // Was 20f
 
 	/**
 	 * Initialize the player
@@ -44,7 +47,7 @@ public class Player extends Human {
 	public Player(DemolitionWars game, boolean team) {
 		super(game, team);
 		setSpriteId(0);
-		jumpAlarm = new Alarm(1, 15, this);
+		jumpAlarm = new Alarm(1, 12, this);  // 15 -> 12 for faster jump
 		selectedItem = 0;
 	}
 
@@ -132,7 +135,7 @@ public class Player extends Human {
 		// Jumping
 		if (OnScreenButtons.buttonA) {
 			if (inAir < 3 && !hasCollided) {
-				addToMomentum(0, 20);
+				addToMomentum(0, JUMP_FORCE);
 				if (inAir == 0) {
 					jumpAlarm.restartAlarm();
 					inAir++;

@@ -8,6 +8,7 @@ import com.diygames.Items.ItemHealthPotion;
 import com.diygames.Items.ItemMachineGun;
 import com.diygames.Items.ItemPistol;
 import com.diygames.Items.ItemStrengthPotion;
+import com.diygames.Items.ItemTimeSlow;
 import com.diygames.Items.ItemWing;
 import com.diygames.demolitionwars.Obtainables;
 import com.diygames.demolitionwars.DemolitionWars;
@@ -23,7 +24,7 @@ public class Weaponclerk extends Salesman {
      */
     public Weaponclerk(DemolitionWars game, boolean team, int homeX){
         super(game, team, homeX);
-        for(int i = 0; i<9; i++){
+        for(int i = 0; i < 10; i++){  // Increased to 10 for time slow item
             inventory.add(getSale(i));
         }
         //Collections.sort(inventory);
@@ -54,6 +55,8 @@ public class Weaponclerk extends Salesman {
                 return new ItemStrengthPotion(game);
             case 8:
                 return new ItemWing(game);
+            case 9:
+                return new ItemTimeSlow(game);  // New time slow item
         }
         return null;
     }
