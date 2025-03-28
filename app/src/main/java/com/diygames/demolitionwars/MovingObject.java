@@ -129,28 +129,51 @@ public class MovingObject extends MoveableGameObject implements Serializable {
      */
 
     public void takeMomentum(){
-        if(momentum.size()>2){  //We have two or more vectors in the following form: a1eiθ1 and a2eiθ2
-            while(momentum.size()>2){
-                /*
-                to add them you need to get them into Cartesian form. Use Euler's formula for that: reiθ=r(cos(θ)+isin(θ)).
-                Then add up the real parts and imaginary parts. And finally, if you need the angle and length back you can convert
-                them back into polar form via r=√x2+y2and θ=atan2(y,x), where x is the real part and y is the imaginary part.
-                 */
-                double r = Math.sqrt(Math.pow(momentum.get(1)*Math.cos( Math.toRadians(momentum.get(0)))+momentum.get(3)*Math.cos( Math.toRadians(momentum.get(2))),2)+Math.pow(momentum.get(1)*Math.sin( Math.toRadians(momentum.get(0)))+momentum.get(3)*Math.sin( Math.toRadians(momentum.get(2))),2));
-                double theta = Math.toDegrees(Math.atan2(momentum.get(1)*Math.sin( Math.toRadians(momentum.get(0)))+momentum.get(3)*Math.sin( Math.toRadians(momentum.get(2))),momentum.get(1)*Math.cos( Math.toRadians(momentum.get(0)))+momentum.get(3)*Math.cos( Math.toRadians(momentum.get(2)))));
-                if(theta<0){ //Compensation for an error with the formula
-                    theta+=360;
-                }
-                momentum.set(0,theta);
-                momentum.set(1,r);
-                momentum.remove(2);
-                momentum.remove(2);
-            }
+        if(momentum.size() <= 0) {
+            return; // Nothing to do if no momentum
         }
-        if(momentum.size()==2){
+        
+        if(momentum.size() == 2) {
             setDirectionSpeed(momentum.get(0), momentum.get(1));
+            momentum.clear();
+            return;
         }
-        momentum.clear();
+        
+        if(momentum.size() > 2) {  // We have two or more vectors
+            // Cache the trigonometric calculations to avoid redundant calculations
+            double[] cosValues = new double[momentum.size()/2];
+            double[] sinValues = new double[momentum.size()/2];
+            
+            // Pre-calculate all trigonometric values
+            for(int i = 0; i < momentum.size(); i += 2) {
+                double angle = Math.toRadians(momentum.get(i));
+                cosValues[i/2] = Math.cos(angle);
+                sinValues[i/2] = Math.sin(angle);
+            }
+            
+            // Combine vectors by adding X and Y components
+            double totalX = 0;
+            double totalY = 0;
+            
+            for(int i = 0; i < momentum.size(); i += 2) {
+                double magnitude = momentum.get(i+1);
+                totalX += magnitude * cosValues[i/2];
+                totalY += magnitude * sinValues[i/2];
+            }
+            
+            // Convert back to polar form
+            double r = Math.sqrt(totalX*totalX + totalY*totalY);
+            double theta = Math.toDegrees(Math.atan2(totalY, totalX));
+            
+            // Adjust negative angles
+            if(theta < 0) {
+                theta += 360;
+            }
+            
+            // Set the direction and speed
+            setDirectionSpeed(theta, r);
+            momentum.clear();
+        }
     }
 
     /**
