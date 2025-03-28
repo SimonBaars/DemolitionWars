@@ -36,6 +36,9 @@ public class DemolitionWars extends GameEngine {
     public static final int MAP_HEIGHT = 4000;
     private static final int MENU_BUTTON_DELAY = 250; // 250ms delay between menu navigation
 	
+    // For backward compatibility with existing code
+    public final int tileSize = TILE_SIZE;
+    
 	// UI elements
     private DashboardTextView moneyDisplay;
     private DashboardTextView inventoryDisplay;

@@ -149,7 +149,7 @@ public class World implements Serializable {
                         MovingObject newObject;
                         if (isHumanType(worldLayout[row][col])) {
                             newObject = createObject(worldLayout[row][col], (team != 0), 
-                                        (mirrorCol * (game.TILE_SIZE * 3)) + (((game.TILE_SIZE * 3) * worldLayout[0].length) * team));
+                                        (mirrorCol * (game.tileSize * 3)) + (((game.tileSize * 3) * worldLayout[0].length) * team));
                         } else {
                             newObject = createObject(worldLayout[row][col], (team != 0), doorId);
                             
@@ -162,8 +162,8 @@ public class World implements Serializable {
                         blocks.add(newObject);
                         
                         // Calculate position
-                        int xPos = (mirrorCol * (game.TILE_SIZE * 3)) + (((game.TILE_SIZE * 3) * worldLayout[0].length) * team);
-                        int yPos = game.MAP_HEIGHT - ((5 + rowOffset) * (game.TILE_SIZE * 3));
+                        int xPos = (mirrorCol * (game.tileSize * 3)) + (((game.tileSize * 3) * worldLayout[0].length) * team);
+                        int yPos = game.getMapHeight() - ((5 + rowOffset) * (game.tileSize * 3));
                         
                         // Add to game with appropriate parameters
                         if (newObject instanceof Human) {
@@ -243,7 +243,7 @@ public class World implements Serializable {
      * Generate terrain layers across the entire map width
      */
     public void generateLayers() {
-        for (int x = 0; x < game.MAP_WIDTH; x += game.TILE_SIZE * 3) {
+        for (int x = 0; x < game.getMapWidth(); x += game.tileSize * 3) {
             createLayer(new BlockUnbreakableRock(game), LAYER_BEDROCK, x);
             createLayer(new BlockStone(game), LAYER_STONE_1, x);
             createLayer(new BlockStone(game), LAYER_STONE_2, x);
@@ -262,7 +262,7 @@ public class World implements Serializable {
      */
     public void createLayer(BlockLandscape layerType, int layer, int x) {
         blocks.add(layerType);
-        game.addGameObject(blocks.get(blocks.size() - 1), x, game.MAP_HEIGHT - (layer * (game.TILE_SIZE * 3)));
+        game.addGameObject(blocks.get(blocks.size() - 1), x, game.getMapHeight() - (layer * (game.tileSize * 3)));
     }
 
     /**
@@ -290,7 +290,7 @@ public class World implements Serializable {
             Human player = humans.get(0);
             int playerX = player.getX();
             int playerY = player.getY();
-            int visibilityDistance = 50 * game.TILE_SIZE; // Only process objects within this distance
+            int visibilityDistance = 50 * game.tileSize; // Only process objects within this distance
             
             for (MovingObject object : blocks) {
                 if (object instanceof Human) {
