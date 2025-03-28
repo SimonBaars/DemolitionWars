@@ -24,45 +24,81 @@ import com.diygames.Humans.Guard;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 /**
- * Created by Simon Baars on 3/24/2015.
+ * World class responsible for generating and managing the game world.
+ * Contains terrain, blocks, and characters.
+ *
+ * @author Simon Baars
  */
 public class World implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	// Block type constants
+	private static final int BLOCK_NONE = 0;
+	private static final int BLOCK_BRICK = 1;
+	private static final int BLOCK_STEEL_DOOR = 2;
+	private static final int BLOCK_WOODEN_POLE = 3;
+	private static final int BLOCK_WOOL_0 = 4;
+	private static final int BLOCK_WOOL_1 = 5;
+	private static final int BLOCK_STEEL = 6;
+	private static final int BLOCK_BRICK_ALT = 7;
+	private static final int BLOCK_WOODEN_DOOR = 8;
+	private static final int BLOCK_PLANKS = 9;
+	private static final int HUMAN_DEMOLIST = 10;
+	private static final int HUMAN_BLOCKSELLER = 11;
+	private static final int HUMAN_WEAPONCLERK = 12;
+	private static final int BLOCK_LADDER = 13;
+	private static final int HUMAN_GUARD = 14;
+	private static final int HUMAN_KING = 15;
+	
+	// Layer constants
+	private static final int LAYER_BEDROCK = -1;
+	private static final int LAYER_STONE_1 = 0;
+	private static final int LAYER_STONE_2 = 1;
+	private static final int LAYER_DIRT_1 = 2;
+	private static final int LAYER_DIRT_2 = 3;
+	private static final int LAYER_GRASS = 4;
 
-	public ArrayList<MovingObject> blocks = new ArrayList<MovingObject>();
-
-	private ArrayList<Obtainables> obtainables = new ArrayList<Obtainables>();
-
+	// Game objects
+	public ArrayList<MovingObject> blocks = new ArrayList<>();
+	private ArrayList<Obtainables> obtainables = new ArrayList<>();
+    public ArrayList<Human> humans = new ArrayList<>();
     public transient DemolitionWars game;
 
-    public ArrayList<Human> humans = new ArrayList<Human>();
-
     /**
-    * Generate the world
+     * Generate the world and its content
+     * 
+     * @param game Reference to the main game class
      */
-    public World(DemolitionWars game){
+    public World(DemolitionWars game) {
         this.game = game;
-        humans.add(new Player(game, false));
-        game.addGameObject(humans.get(0), 2974, 2848);
-        game.setPlayer(humans.get(0));
-
+        
+        // Create the player and add it to the world
+        createPlayer();
+        
+        // Generate terrain layers and structures
         generateLayers();
         generateWorld();
     }
+    
+    /**
+     * Creates the player character and positions it in the world
+     */
+    private void createPlayer() {
+        humans.add(new Player(game, false));
+        game.addGameObject(humans.get(0), 2974, 2848);
+        game.setPlayer(humans.get(0));
+    }
 
     /**
-    * Generate both sides of the world
+     * Generate both sides of the world with mirrored structures
      */
-    void generateWorld(){
-        /*
-        For the size of the array I use:
-        game.getMapWidth()/(game.tileSize*3) which is 15000/(64*3)=78.12 (53 naar 78)
-        game.getMapHeight()/(game.tileSize*3) which is (4000/(64*3))-6=14.83(15)
-         */
-        //Block[] blockTypes = {new BlockBrick(), new BlockSteelDoor(false, 0, 0), new BlockWoodenPole(), new BlockWool(0), new BlockWool(1), new BlockSteel(), new BlockBrick()};
-        int[][] world = {
+    private void generateWorld() {
+        // World layout as a 2D grid
+        // Each number corresponds to a block type defined by the constants
+        int[][] worldLayout = {
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,6,0,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,6,6,6,0,0,0,0,0,0,7,0,0,7,0,0,0,0,0,0,9,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -79,115 +115,171 @@ public class World implements Serializable {
                 {0,1,13,0,0,0,0,1,0,0,0,3,0,3,0,3,0,0,3,0,3,0,3,0,0,3,0,3,0,3,0,0,0,0,0,6,6,6,6,0,0,0,0,0,0,7,7,7,7,0,0,0,0,0,0,9,9,9,9,0,0,0,0,0,0,0,9,0,0,0,0,0,0,9,0,0,0,0},
         };
 
-        int doorId=0;
-        for(int team = 0; team<2; team++) {
-            int k = 0;
-            for (int i = world.length - 1; i >= 0; i--) {
-                int l = world[0].length-1;
-                for (int j = 0; j < world[0].length; j++) {
-                    if (world[i][j] != 0) {
-                        int mirrorTeam = l;
+        placeWorldObjects(worldLayout);
+    }
+    
+    /**
+     * Place objects in the world based on the layout
+     * 
+     * @param worldLayout 2D array representing the world layout
+     */
+    private void placeWorldObjects(int[][] worldLayout) {
+        // Track door IDs to link them properly
+        int doorId = 0;
+        
+        // Generate both sides (team 0 and team 1)
+        for (int team = 0; team < 2; team++) {
+            int rowOffset = 0;
+            
+            // Place objects from bottom to top
+            for (int row = worldLayout.length - 1; row >= 0; row--) {
+                int reverseColumn = worldLayout[0].length - 1;
+                
+                // Place objects in each row
+                for (int col = 0; col < worldLayout[0].length; col++) {
+                    // Skip empty spaces
+                    if (worldLayout[row][col] != BLOCK_NONE) {
+                        // Calculate mirrored position for team 1
+                        int mirrorCol = reverseColumn;
                         if (team == 0) {
-                            mirrorTeam = j;
+                            mirrorCol = col;
                         }
-                        if (getType(world[i][j], false, 0) instanceof Human) {
-                            blocks.add(getType(world[i][j], (team != 0), (mirrorTeam * (game.tileSize * 3)) + (((game.tileSize * 3) * world[0].length) * team)));
+                        
+                        // Create the appropriate object
+                        MovingObject newObject;
+                        if (isHumanType(worldLayout[row][col])) {
+                            newObject = createObject(worldLayout[row][col], (team != 0), 
+                                        (mirrorCol * (game.TILE_SIZE * 3)) + (((game.TILE_SIZE * 3) * worldLayout[0].length) * team));
                         } else {
-                            blocks.add(getType(world[i][j], (team != 0), doorId));
-                            if (getType(world[i][j], false, 0) instanceof BlockDoor) {
+                            newObject = createObject(worldLayout[row][col], (team != 0), doorId);
+                            
+                            // Increment door ID if this is a door
+                            if (newObject instanceof BlockDoor) {
                                 doorId++;
                             }
                         }
-                        if (blocks.get(blocks.size() - 1) instanceof Human) {
-                            game.addGameObject(blocks.get(blocks.size() - 1), (mirrorTeam * (game.tileSize * 3)) + (((game.tileSize * 3) * world[0].length) * team), game.getMapHeight() - ((5 + k) * (game.tileSize * 3)),1);
+                        
+                        blocks.add(newObject);
+                        
+                        // Calculate position
+                        int xPos = (mirrorCol * (game.TILE_SIZE * 3)) + (((game.TILE_SIZE * 3) * worldLayout[0].length) * team);
+                        int yPos = game.MAP_HEIGHT - ((5 + rowOffset) * (game.TILE_SIZE * 3));
+                        
+                        // Add to game with appropriate parameters
+                        if (newObject instanceof Human) {
+                            game.addGameObject(newObject, xPos, yPos, 1);
                         } else {
-                            game.addGameObject(blocks.get(blocks.size() - 1), (mirrorTeam * (game.tileSize * 3)) + (((game.tileSize * 3) * world[0].length) * team), game.getMapHeight() - ((5 + k) * (game.tileSize * 3)));
+                            game.addGameObject(newObject, xPos, yPos);
                         }
                     }
-                    l--;
+                    reverseColumn--;
                 }
-                k++;
+                rowOffset++;
             }
-            doorId++; //Doors must take mirrorvalues too!
+            doorId++; // Doors must take mirror values too
         }
+    }
+    
+    /**
+     * Check if a block type is a human character
+     * 
+     * @param blockTypeId The block type ID to check
+     * @return True if this is a human character type
+     */
+    private boolean isHumanType(int blockTypeId) {
+        return blockTypeId == HUMAN_DEMOLIST || 
+               blockTypeId == HUMAN_BLOCKSELLER || 
+               blockTypeId == HUMAN_WEAPONCLERK || 
+               blockTypeId == HUMAN_GUARD || 
+               blockTypeId == HUMAN_KING;
     }
 
     /**
-    * Get the type of block we're trying to add to the world
+     * Create an object based on its type ID and metadata
+     * 
+     * @param blockTypeId The block type ID
+     * @param metadata Boolean metadata (typically indicates team/side)
+     * @param moreMetadata Additional metadata (typically used for door IDs)
+     * @return The created MovingObject
      */
-    public MovingObject getType(int blockTypeId, boolean metadata, int moreMetadata){
-        switch(blockTypeId){
-            case 1:
+    public MovingObject createObject(int blockTypeId, boolean metadata, int moreMetadata) {
+        switch (blockTypeId) {
+            case BLOCK_BRICK:
                 return new BlockBrick(game);
-            case 2:
-                return new BlockSteelDoor(game,metadata, moreMetadata);
-            case 3:
+            case BLOCK_STEEL_DOOR:
+                return new BlockSteelDoor(game, metadata, moreMetadata);
+            case BLOCK_WOODEN_POLE:
                 return new BlockWoodenPole(game);
-            case 4:
-                return new BlockWool(game,0);
-            case 5:
-                return new BlockWool(game,1);
-            case 6:
+            case BLOCK_WOOL_0:
+                return new BlockWool(game, 0);
+            case BLOCK_WOOL_1:
+                return new BlockWool(game, 1);
+            case BLOCK_STEEL:
                 return new BlockSteel(game);
-            case 7:
+            case BLOCK_BRICK_ALT:
                 return new BlockBrick(game);
-            case 8:
-                return new BlockWoodenDoor(game,metadata, moreMetadata);
-            case 9:
+            case BLOCK_WOODEN_DOOR:
+                return new BlockWoodenDoor(game, metadata, moreMetadata);
+            case BLOCK_PLANKS:
                 return new BlockPlanks(game);
-            case 10:
+            case HUMAN_DEMOLIST:
                 return new Demolist(game, metadata, moreMetadata);
-            case 11:
+            case HUMAN_BLOCKSELLER:
                 return new Blockseller(game, metadata, moreMetadata);
-            case 12:
+            case HUMAN_WEAPONCLERK:
                 return new Weaponclerk(game, metadata, moreMetadata);
-            case 13:
+            case BLOCK_LADDER:
                 return new BlockLadder(game, metadata);
-            case 14:
+            case HUMAN_GUARD:
                 return new Guard(game, metadata, moreMetadata);
-            case 15:
+            case HUMAN_KING:
                 return new King(game, metadata, moreMetadata);
-        }
-        return null;
-    }
-
-    /**
-    * Generate layers of the world
-     */
-	public void generateLayers() {
-        for(int i = 0; i<game.getMapWidth(); i+=game.tileSize*3) {
-            createLayer(new BlockUnbreakableRock(game), -1, i);
-            createLayer(new BlockStone(game), 0, i);
-            createLayer(new BlockStone(game), 1, i);
-            createLayer(new BlockDirt(game), 2, i);
-            createLayer(new BlockDirt(game), 3, i);
-            createLayer(new BlockGrass(game), 4, i);
+            default:
+                return null;
         }
     }
 
     /**
-    * Create the layer itself
+     * Generate terrain layers across the entire map width
      */
-    public void createLayer(BlockLandscape layerType, int layer, int i){
+    public void generateLayers() {
+        for (int x = 0; x < game.MAP_WIDTH; x += game.TILE_SIZE * 3) {
+            createLayer(new BlockUnbreakableRock(game), LAYER_BEDROCK, x);
+            createLayer(new BlockStone(game), LAYER_STONE_1, x);
+            createLayer(new BlockStone(game), LAYER_STONE_2, x);
+            createLayer(new BlockDirt(game), LAYER_DIRT_1, x);
+            createLayer(new BlockDirt(game), LAYER_DIRT_2, x);
+            createLayer(new BlockGrass(game), LAYER_GRASS, x);
+        }
+    }
+
+    /**
+     * Create a single terrain layer block
+     * 
+     * @param layerType The block type to create
+     * @param layer The layer number (affects vertical position)
+     * @param x The x-coordinate
+     */
+    public void createLayer(BlockLandscape layerType, int layer, int x) {
         blocks.add(layerType);
-        game.addGameObject(blocks.get(blocks.size()-1), i, game.getMapHeight() - (layer*(game.tileSize * 3)));
+        game.addGameObject(blocks.get(blocks.size() - 1), x, game.MAP_HEIGHT - (layer * (game.TILE_SIZE * 3)));
     }
 
     /**
-    * Check if a given integer is even or not
+     * Check if a given integer is even
+     * 
+     * @param number The number to check
+     * @return True if the number is even, false otherwise
      */
-    public boolean isEven(int number){
-        if ((number & 1) == 0) {
-            return true;
-        } else {
-            return false;
-        }
+    public boolean isEven(int number) {
+        return (number & 1) == 0;
     }
 
     /**
-    * Optimize the collisions for all Humans
+     * Optimize collision detection for all human characters
+     * Only processes humans within a certain distance of the player
      */
-    public void optimizeCollisionsForAllHumans(){
+    public void optimizeCollisionsForAllHumans() {
         // Optimize player collisions first (most important)
         if (!humans.isEmpty()) {
             humans.get(0).optimizeCollisions();
@@ -198,11 +290,11 @@ public class World implements Serializable {
             Human player = humans.get(0);
             int playerX = player.getX();
             int playerY = player.getY();
-            int visibilityDistance = 50 * game.tileSize; // Only process objects within this distance
+            int visibilityDistance = 50 * game.TILE_SIZE; // Only process objects within this distance
             
-            for(MovingObject object : blocks){
-                if(object instanceof Human){
-                    Human human = (Human)object;
+            for (MovingObject object : blocks) {
+                if (object instanceof Human) {
+                    Human human = (Human) object;
                     
                     // Only optimize collisions for humans close to the player
                     int humanX = human.getX();
