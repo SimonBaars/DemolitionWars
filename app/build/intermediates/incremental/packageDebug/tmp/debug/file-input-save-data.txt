@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Fri Mar 28 19:14:13 CET 2025
+0.baseType=DIRECTORY
+0.base=/home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/build/intermediates/transforms/dexMerger/debug/0
+0.path=classes.dex
+0.set=DEX
+count=1

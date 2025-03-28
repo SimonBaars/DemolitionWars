@@ -1,0 +1,153 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:2:1-27:12
+INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:2:1-27:12
+INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:2:1-27:12
+INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:2:1-27:12
+MERGED from [com.android.support:appcompat-v7:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/7b3116d6e942cac862ea688540bca2ed/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-fragment-28.0.0.aar/75c73a17e46ecaeaf53cdacf7af0df26/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-28.0.0.aar/936496f89390b8913d59b8cd50265692/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-core-ui-28.0.0.aar/9332d9902b97df2a47e06ced89f5a0ec/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-core-utils-28.0.0.aar/f74732cd356dc0be0ff19ba6fe3f0a13/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-28.0.0.aar/715a95368ec72a774a1680f0dd75befa/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:loader:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/loader-28.0.0.aar/6151268024bf9e9c1a69f8e52810d52d/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:viewpager:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/viewpager-28.0.0.aar/f4f1793ed2c0819108eea112b7ddcb92/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:coordinatorlayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-28.0.0.aar/b707307076097fabf0316e6d61d39b3d/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:drawerlayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/drawerlayout-28.0.0.aar/5ddecba8c8f40e95d02e9a3b20a7d940/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:slidingpanelayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-28.0.0.aar/0d22d7cfdf32018c1e633889bb290788/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:customview:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/customview-28.0.0.aar/73e8e678e199f0366a551ffeb39148c3/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-28.0.0.aar/292fd1a6a1f876ec96dda794eea68ee8/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-28.0.0.aar/71526ea8cc248e73b0f111f2e8f8c224/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/5b3849a739af49019078f1fad8c1e5c3/AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:versionedparcelable:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/615dcc8424444959ccf5d8c84642423e/AndroidManifest.xml:17:1-25:12
+MERGED from [com.android.support:cursoradapter:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/cursoradapter-28.0.0.aar/4b9a22c50534c0f907657377d837751d/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/7703e56330e08ae19790f5fcb9c260b0/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:documentfile:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/documentfile-28.0.0.aar/434b8bb60d5da975ae4d4ee7176a9891/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-28.0.0.aar/240a7a9b6b7fee586a344177e9afdb6c/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:print:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/print-28.0.0.aar/ab55f385b1338de5f09267569e821230/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/652b464bfaae52e211dbac370701f873/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/livedata-1.1.1.aar/3e8dd8083dce5322d5c50a758c5b629c/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.1.aar/8070a3b1d026b98621a86b4f30e119d8/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.core:runtime:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/eccac18c7ff41a722f44d2bb084444ba/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:interpolator:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/78b6acafc65390e6561357e31af9aaec/AndroidManifest.xml:17:1-22:12
+INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:2:1-27:12
+INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:2:1-27:12
+INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:2:1-27:12
+	package
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:3:5-40
+		INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml
+		INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:5:5-30
+		INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml
+		INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:4:5-28
+		INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml
+		INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml
+uses-sdk
+ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:7:5-43
+INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:7:5-43
+INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:7:5-43
+MERGED from [com.android.support:appcompat-v7:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/7b3116d6e942cac862ea688540bca2ed/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/7b3116d6e942cac862ea688540bca2ed/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-fragment-28.0.0.aar/75c73a17e46ecaeaf53cdacf7af0df26/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-fragment-28.0.0.aar/75c73a17e46ecaeaf53cdacf7af0df26/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-28.0.0.aar/936496f89390b8913d59b8cd50265692/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-28.0.0.aar/936496f89390b8913d59b8cd50265692/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-core-ui-28.0.0.aar/9332d9902b97df2a47e06ced89f5a0ec/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-core-ui-28.0.0.aar/9332d9902b97df2a47e06ced89f5a0ec/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-core-utils-28.0.0.aar/f74732cd356dc0be0ff19ba6fe3f0a13/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-core-utils-28.0.0.aar/f74732cd356dc0be0ff19ba6fe3f0a13/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-28.0.0.aar/715a95368ec72a774a1680f0dd75befa/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-28.0.0.aar/715a95368ec72a774a1680f0dd75befa/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/loader-28.0.0.aar/6151268024bf9e9c1a69f8e52810d52d/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/loader-28.0.0.aar/6151268024bf9e9c1a69f8e52810d52d/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/viewpager-28.0.0.aar/f4f1793ed2c0819108eea112b7ddcb92/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/viewpager-28.0.0.aar/f4f1793ed2c0819108eea112b7ddcb92/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-28.0.0.aar/b707307076097fabf0316e6d61d39b3d/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-28.0.0.aar/b707307076097fabf0316e6d61d39b3d/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/drawerlayout-28.0.0.aar/5ddecba8c8f40e95d02e9a3b20a7d940/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/drawerlayout-28.0.0.aar/5ddecba8c8f40e95d02e9a3b20a7d940/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-28.0.0.aar/0d22d7cfdf32018c1e633889bb290788/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-28.0.0.aar/0d22d7cfdf32018c1e633889bb290788/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/customview-28.0.0.aar/73e8e678e199f0366a551ffeb39148c3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/customview-28.0.0.aar/73e8e678e199f0366a551ffeb39148c3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-28.0.0.aar/292fd1a6a1f876ec96dda794eea68ee8/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-28.0.0.aar/292fd1a6a1f876ec96dda794eea68ee8/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-28.0.0.aar/71526ea8cc248e73b0f111f2e8f8c224/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-28.0.0.aar/71526ea8cc248e73b0f111f2e8f8c224/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/5b3849a739af49019078f1fad8c1e5c3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/5b3849a739af49019078f1fad8c1e5c3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/615dcc8424444959ccf5d8c84642423e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/615dcc8424444959ccf5d8c84642423e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/cursoradapter-28.0.0.aar/4b9a22c50534c0f907657377d837751d/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/cursoradapter-28.0.0.aar/4b9a22c50534c0f907657377d837751d/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/7703e56330e08ae19790f5fcb9c260b0/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/7703e56330e08ae19790f5fcb9c260b0/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/documentfile-28.0.0.aar/434b8bb60d5da975ae4d4ee7176a9891/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/documentfile-28.0.0.aar/434b8bb60d5da975ae4d4ee7176a9891/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-28.0.0.aar/240a7a9b6b7fee586a344177e9afdb6c/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-28.0.0.aar/240a7a9b6b7fee586a344177e9afdb6c/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/print-28.0.0.aar/ab55f385b1338de5f09267569e821230/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/print-28.0.0.aar/ab55f385b1338de5f09267569e821230/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/652b464bfaae52e211dbac370701f873/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/652b464bfaae52e211dbac370701f873/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/livedata-1.1.1.aar/3e8dd8083dce5322d5c50a758c5b629c/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/livedata-1.1.1.aar/3e8dd8083dce5322d5c50a758c5b629c/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.1.aar/8070a3b1d026b98621a86b4f30e119d8/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.1.aar/8070a3b1d026b98621a86b4f30e119d8/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/eccac18c7ff41a722f44d2bb084444ba/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] /home/simon/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/eccac18c7ff41a722f44d2bb084444ba/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/78b6acafc65390e6561357e31af9aaec/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/78b6acafc65390e6561357e31af9aaec/AndroidManifest.xml:20:5-44
+INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:7:5-43
+INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:7:5-43
+	android:targetSdkVersion
+		INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:7:5-43
+		INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:7:15-40
+		INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml
+		INJECTED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml
+application
+ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:10:5-22:19
+MERGED from [com.android.support:support-compat:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/5b3849a739af49019078f1fad8c1e5c3/AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:support-compat:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/5b3849a739af49019078f1fad8c1e5c3/AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:versionedparcelable:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/615dcc8424444959ccf5d8c84642423e/AndroidManifest.xml:22:5-23:19
+MERGED from [com.android.support:versionedparcelable:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/615dcc8424444959ccf5d8c84642423e/AndroidManifest.xml:22:5-23:19
+	android:appComponentFactory
+		ADDED from [com.android.support:support-compat:28.0.0] /home/simon/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/5b3849a739af49019078f1fad8c1e5c3/AndroidManifest.xml:22:18-91
+	android:label
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:12:9-41
+	android:debuggable
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:12:42-67
+	android:icon
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:11:9-45
+activity#com.diygames.demolitionwars.DemolitionWars
+ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:13:9-21:20
+	android:label
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:14:13-45
+	android:name
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:15:13-70
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:16:13-20:29
+action#android.intent.action.MAIN
+ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:17:17-69
+	android:name
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:17:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:19:17-77
+	android:name
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:19:27-74
+uses-permission#android.permission.WAKE_LOCK
+ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:24:2-65
+	android:name
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:24:19-62
+uses-permission#android.permission.VIBRATE
+ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:25:2-63
+	android:name
+		ADDED from /home/simon/Downloads/DemolitionWars FINAL/DemolitionWars/app/src/main/AndroidManifest.xml:25:19-60

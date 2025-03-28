@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\libs\internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-dc606a58906606a660346aae9459c9750094771d.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.0.0\support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-b02d5f0bbb77641e1684f83d7fa0b9acc540cbd4.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\pre-dexed\debug\classes-702fca72d9211d896df9baebb98e6562bf9b1e14.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\pre-dexed\debug\classes-1c62d298af303c219eb6e56e276fc0e708dabc80.jar" />
+    </item>
+
+</items>
