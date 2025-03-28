@@ -1,5 +1,0 @@
-C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\classes\debug
-C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-b02d5f0bbb77641e1684f83d7fa0b9acc540cbd4.jar
-C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-dc606a58906606a660346aae9459c9750094771d.jar
-C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\pre-dexed\debug\classes-702fca72d9211d896df9baebb98e6562bf9b1e14.jar
-C:\Users\Administrator\Desktop\OOPD\DemolitionWars\app\build\intermediates\pre-dexed\debug\classes-1c62d298af303c219eb6e56e276fc0e708dabc80.jar
