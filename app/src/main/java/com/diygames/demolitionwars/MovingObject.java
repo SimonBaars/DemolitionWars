@@ -44,17 +44,25 @@ public class MovingObject extends MoveableGameObject implements Serializable {
     }
 
     /**
-    * Check for gravity, if there's auto momentum (add x steps to momentum) it adds that momentum and it takes the momentum
+     * Update method called every frame.
+     * Handles gravity, momentum and movement.
      */
-    public void update(){
+    @Override
+    public void update() {
         super.update();
-        if((inAir>0 && !(this instanceof ItemBullet)) || this instanceof Player){
-        gravity();
+        
+        // Apply gravity if needed
+        if ((inAir > 0 && !(this instanceof ItemBullet)) || this instanceof Player) {
+            gravity();
         }
-        if(autoMomentumAddition[0]>=1){
+        
+        // Apply any scheduled momentum additions
+        if (autoMomentumAddition[0] >= 1) {
             autoMomentumAddition[0]--;
             addToMomentum(autoMomentumAddition[1], autoMomentumAddition[2]);
         }
+        
+        // Process all momentum vectors
         takeMomentum();
     }
 
@@ -149,74 +157,69 @@ public class MovingObject extends MoveableGameObject implements Serializable {
     }
 
     /**
-    * Add a momentum the next x steps
+     * Add momentum to be applied over multiple steps
+     * @param steps Number of steps to apply this momentum
+     * @param degrees Direction in degrees
+     * @param speed Speed/magnitude of momentum
      */
-    public void addXTimesToMomentum(int x, double degrees, double speed){
-        autoMomentumAddition[0]=x;
-        autoMomentumAddition[1]=degrees;
-        autoMomentumAddition[2]=speed;
+    public void addXTimesToMomentum(int steps, double degrees, double speed) {
+        autoMomentumAddition[0] = steps;
+        autoMomentumAddition[1] = degrees;
+        autoMomentumAddition[2] = speed;
     }
 
     /**
-    * Add a momentum 1 time
+     * Add momentum to be applied immediately
+     * @param degrees Direction in degrees
+     * @param speed Speed/magnitude of momentum
      */
-    public void addToMomentum(double degrees, double speed){
+    public void addToMomentum(double degrees, double speed) {
         momentum.add(degrees);
         momentum.add(speed);
     }
 
     /**
-    * Instead of speed to specific directions we're using momentum in this simulation.
-    * This is because this game is made of complex momentums, speeds and directions. Literally.
-    * Why literally? We're actually using complex numbers and stuff to calculate it all. I love math :).
-    * All credit goes to Stackexchange user Bye_World and Simon Baars who've been working all night
-    * on figuring out this formula. All permissions for this code go to Simon Baars :).
+     * Process all momentum values and apply the resulting movement.
+     * Uses vector addition to combine all momentum vectors.
      */
-
-    public void takeMomentum(){
-        if(momentum.size() <= 0) {
-            return; // Nothing to do if no momentum
+    public void takeMomentum() {
+        // Nothing to do if no momentum
+        if (momentum.isEmpty()) {
+            return;
         }
         
-        if(momentum.size() == 2) {
+        // Simple case: only one momentum vector
+        if (momentum.size() == 2) {
             setDirectionSpeed(momentum.get(0), momentum.get(1));
             momentum.clear();
             return;
         }
         
-        if(momentum.size() > 2) {  // We have two or more vectors
-            // Cache the trigonometric calculations to avoid redundant calculations
-            double[] cosValues = new double[momentum.size()/2];
-            double[] sinValues = new double[momentum.size()/2];
-            
-            // Pre-calculate all trigonometric values
-            for(int i = 0; i < momentum.size(); i += 2) {
-                double angle = Math.toRadians(momentum.get(i));
-                cosValues[i/2] = Math.cos(angle);
-                sinValues[i/2] = Math.sin(angle);
-            }
-            
-            // Combine vectors by adding X and Y components
+        // Complex case: multiple momentum vectors to combine
+        if (momentum.size() > 2) {
+            // Convert polar vectors to cartesian components and sum them
             double totalX = 0;
             double totalY = 0;
             
-            for(int i = 0; i < momentum.size(); i += 2) {
-                double magnitude = momentum.get(i+1);
-                totalX += magnitude * cosValues[i/2];
-                totalY += magnitude * sinValues[i/2];
+            for (int i = 0; i < momentum.size(); i += 2) {
+                double angle = Math.toRadians(momentum.get(i));
+                double magnitude = momentum.get(i + 1);
+                
+                totalX += magnitude * Math.cos(angle);
+                totalY += magnitude * Math.sin(angle);
             }
             
             // Convert back to polar form
-            double r = Math.sqrt(totalX*totalX + totalY*totalY);
-            double theta = Math.toDegrees(Math.atan2(totalY, totalX));
+            double resultantMagnitude = Math.sqrt(totalX * totalX + totalY * totalY);
+            double resultantAngle = Math.toDegrees(Math.atan2(totalY, totalX));
             
             // Adjust negative angles
-            if(theta < 0) {
-                theta += 360;
+            if (resultantAngle < 0) {
+                resultantAngle += 360;
             }
             
-            // Set the direction and speed
-            setDirectionSpeed(theta, r);
+            // Apply the resultant momentum
+            setDirectionSpeed(resultantAngle, resultantMagnitude);
             momentum.clear();
         }
     }
