@@ -51,6 +51,11 @@ public class DemolitionWars extends GameEngine {
     
     // For handling the start button
     private boolean startButtonPressed = false;
+    
+    // For menu navigation
+    private boolean menuButtonPressed = false;
+    private long lastMenuButtonPressTime = 0;
+    private static final long MENU_BUTTON_DELAY = 250; // 250ms delay between menu navigation button presses
 
     // Game menu
     private GameMenu gameMenu;
@@ -202,6 +207,9 @@ public class DemolitionWars extends GameEngine {
 	public void update() {
         super.update();
         
+        // Current time for button delay
+        long currentTime = System.currentTimeMillis();
+        
         // Handle start button press
         if (OnScreenButtons.start && !startButtonPressed) {
             gameMenu.toggleMenu();
@@ -212,17 +220,23 @@ public class DemolitionWars extends GameEngine {
         
         // Handle menu navigation when menu is open
         if (gameMenu.isMenuOpen()) {
-            if (OnScreenButtons.dPadUp && !startButtonPressed) {
-                gameMenu.moveSelectionUp();
-                startButtonPressed = true;
-            } else if (OnScreenButtons.dPadDown && !startButtonPressed) {
-                gameMenu.moveSelectionDown();
-                startButtonPressed = true;
-            } else if (OnScreenButtons.buttonA && !startButtonPressed) {
-                gameMenu.selectOption();
-                startButtonPressed = true;
-            } else if (!OnScreenButtons.dPadUp && !OnScreenButtons.dPadDown && !OnScreenButtons.buttonA) {
-                startButtonPressed = false;
+            boolean buttonPressed = OnScreenButtons.dPadUp || OnScreenButtons.dPadDown || OnScreenButtons.buttonA;
+            boolean timeDelayMet = currentTime - lastMenuButtonPressTime > MENU_BUTTON_DELAY;
+            
+            // Process button press if either the button wasn't pressed before, or enough time has passed
+            if (buttonPressed && (!menuButtonPressed || timeDelayMet)) {
+                if (OnScreenButtons.dPadUp) {
+                    gameMenu.moveSelectionUp();
+                    lastMenuButtonPressTime = currentTime;
+                } else if (OnScreenButtons.dPadDown) {
+                    gameMenu.moveSelectionDown();
+                    lastMenuButtonPressTime = currentTime;
+                } else if (OnScreenButtons.buttonA) {
+                    gameMenu.selectOption();
+                }
+                menuButtonPressed = true;
+            } else if (!buttonPressed) {
+                menuButtonPressed = false;
             }
             
             // Display menu
