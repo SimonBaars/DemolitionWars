@@ -160,13 +160,20 @@ public class DemolitionWars extends GameEngine {
     * Reset the game to initial state
     */
     public void resetGame() {
+        // Create a new world
         world = new World(this);
         gameOver = false;
         
         // Set player object
         setPlayer(world.humans.get(0));
         
+        // Make sure collisions are optimized
         world.optimizeCollisionsForAllHumans();
+        
+        // Clear any existing game menu
+        if (gameMenu != null && gameMenu.isMenuOpen()) {
+            gameMenu.closeMenu();
+        }
     }
 
 
