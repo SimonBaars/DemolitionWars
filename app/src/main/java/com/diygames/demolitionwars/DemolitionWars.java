@@ -46,6 +46,7 @@ public class DemolitionWars extends GameEngine {
     private DashboardTextView shopDisplay;
     private DashboardTextView gameOverDisplay;
     private DashboardTextView menuDisplay;
+    private DashboardTextView messageDisplay;
 
     // Game state
     public String shopDisplayString = "";
@@ -62,6 +63,11 @@ public class DemolitionWars extends GameEngine {
     private boolean startButtonPressed = false;
     private boolean menuButtonPressed = false;
     private long lastMenuButtonPressTime = 0;
+    
+    // Message display
+    private String currentMessage = "";
+    private long messageDisplayTime = 0;
+    private static final long MESSAGE_DURATION = 2000; // 2 seconds
 
     // Game menu
     private GameMenu gameMenu;
@@ -124,6 +130,26 @@ public class DemolitionWars extends GameEngine {
         int centerY = (int)(screenHeight / 2 - 150);
         gameOverDisplay = createNewDisplay((int)(700 * scaleFactorX), (int)(200 * scaleFactorY), 30);
         menuDisplay = createNewDisplay(centerX, centerY, 24);
+        
+        // Message display (centered at top of screen)
+        messageDisplay = createNewDisplay(centerX, 50, 24);
+        messageDisplay.setTextColor(Color.GREEN);
+    }
+
+    /**
+     * Show a "Game Saved" message
+     */
+    public void showSaveMessage() {
+        showMessage("Game Saved");
+    }
+    
+    /**
+     * Show a temporary message on screen
+     * @param message The message to display
+     */
+    public void showMessage(String message) {
+        currentMessage = message;
+        messageDisplayTime = System.currentTimeMillis();
     }
 
     /**
@@ -259,6 +285,27 @@ public class DemolitionWars extends GameEngine {
         
         // Update UI displays
         updateDisplays();
+        
+        // Handle temporary messages
+        updateMessageDisplay();
+    }
+    
+    /**
+     * Update the message display
+     */
+    private void updateMessageDisplay() {
+        if (currentMessage.isEmpty()) {
+            messageDisplay.setTextString("");
+            return;
+        }
+        
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - messageDisplayTime > MESSAGE_DURATION) {
+            currentMessage = "";
+            messageDisplay.setTextString("");
+        } else {
+            messageDisplay.setTextString(currentMessage);
+        }
     }
     
     /**

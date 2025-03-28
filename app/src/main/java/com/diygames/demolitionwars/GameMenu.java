@@ -162,6 +162,9 @@ public class GameMenu implements Serializable {
             oos.close();
             fos.close();
             closeMenu();
+            
+            // Show "Game Saved" message
+            game.showSaveMessage();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -172,6 +175,12 @@ public class GameMenu implements Serializable {
      */
     private void loadGame() {
         try {
+            // Check if save file exists
+            if (!game.getFileStreamPath("savegame.dat").exists()) {
+                game.showMessage("No saved game found");
+                return;
+            }
+            
             // Stop the game thread to avoid concurrent modifications
             game.pause();
             
@@ -195,16 +204,21 @@ public class GameMenu implements Serializable {
             game.world = loadedWorld;
             game.world.game = game; // Restore transient reference
             
-            // Recreate game objects
+            // Recreate game objects - first recreate blocks
             for (MovingObject obj : game.world.blocks) {
-                game.addGameObject(obj, obj.getX(), obj.getY());
-                obj.game = game; // Restore transient reference
+                if (obj != null) {
+                    game.addGameObject(obj, obj.getX(), obj.getY());
+                    obj.game = game; // Restore transient reference
+                }
             }
             
+            // Then recreate humans (to ensure they're rendered on top)
             for (Human human : game.world.humans) {
-                game.addGameObject(human, human.getX(), human.getY());
-                human.game = game; // Restore transient reference
-                human.initAlarm(); // Reinitialize alarms
+                if (human != null) {
+                    game.addGameObject(human, human.getX(), human.getY(), 1);
+                    human.game = game; // Restore transient reference
+                    human.initAlarm(); // Reinitialize alarms
+                }
             }
             
             // Set player
@@ -215,13 +229,20 @@ public class GameMenu implements Serializable {
             // Set game state
             game.gameOver = false;
             
+            // Make sure collisions are optimized
+            game.world.optimizeCollisionsForAllHumans();
+            
             // Close the menu
             closeMenu();
+            
+            // Show message that game was loaded
+            game.showMessage("Game Loaded");
             
             // Restart the game thread
             game.resume();
         } catch (Exception e) {
             e.printStackTrace();
+            game.showMessage("Error loading game");
             // If loading fails, create a new world
             resetGame();
         }
