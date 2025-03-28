@@ -1,9 +1,7 @@
 package com.diygames.Items;
 
 import com.diygames.demolitionwars.DemolitionWars;
-/**
- * Created by Oguz Uncu
- */
+
 public abstract class ItemWeapon extends Item {
 
     public ItemWeapon(DemolitionWars game){

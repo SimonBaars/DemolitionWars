@@ -2,9 +2,7 @@ package com.diygames.Items;
 
 import com.diygames.Blocks.Block;
 import com.diygames.demolitionwars.DemolitionWars;
-/**
- * Created by Oguz Uncu
- */
+
 public class ItemDrill extends Item {
     /**
      * Set the item's price 'n name 'n uses

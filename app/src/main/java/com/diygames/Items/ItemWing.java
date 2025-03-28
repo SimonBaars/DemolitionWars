@@ -1,9 +1,7 @@
 package com.diygames.Items;
 
 import com.diygames.demolitionwars.DemolitionWars;
-/**
- * Created by Oguz Uncu
- */
+
 public class ItemWing extends Item {
     /**
      * Set the item's price 'n name 'n uses

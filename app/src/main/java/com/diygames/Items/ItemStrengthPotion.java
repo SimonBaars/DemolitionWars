@@ -1,9 +1,7 @@
 package com.diygames.Items;
 
 import com.diygames.demolitionwars.DemolitionWars;
-/**
- * Created by Oguz Uncu
- */
+
 public class ItemStrengthPotion extends ItemPotion {
     /**
      * Set the item's price 'n name

@@ -5,9 +5,7 @@ import android.gameengine.icadroids.alarms.IAlarm;
 
 import com.diygames.Humans.Human;
 import com.diygames.demolitionwars.DemolitionWars;
-/**
- * Created by Oguz Uncu
- */
+
 public class ItemBlade extends ItemWeapon implements IAlarm {
 
     private Alarm bladeAlarm;

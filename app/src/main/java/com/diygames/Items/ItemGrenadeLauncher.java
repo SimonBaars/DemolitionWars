@@ -7,9 +7,7 @@ import com.diygames.demolitionwars.Obtainables;
 import com.diygames.demolitionwars.DemolitionWars;
 
 import java.util.ArrayList;
-/**
- * Created by Oguz Uncu
- */
+
 public class ItemGrenadeLauncher extends ItemGun {
 
     ArrayList<BlockGrenade> ammo = new ArrayList<BlockGrenade>();

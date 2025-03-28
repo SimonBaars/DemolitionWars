@@ -2,9 +2,7 @@ package com.diygames.Items;
 
 import com.diygames.demolitionwars.Obtainables;
 import com.diygames.demolitionwars.DemolitionWars;
-/**
- * Created by Oguz Uncu
- */
+
 public class ItemPistol extends ItemGun {
     /**
      * Set the item's price 'n name
