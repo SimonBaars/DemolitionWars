@@ -188,11 +188,32 @@ public class World implements Serializable {
     * Optimize the collisions for all Humans
      */
     public void optimizeCollisionsForAllHumans(){
-        humans.get(0).optimizeCollisions();
-        for(MovingObject object : blocks){
-            if(object instanceof Human){
-                Human human = (Human)object;
-                human.optimizeCollisions();
+        // Optimize player collisions first (most important)
+        if (!humans.isEmpty()) {
+            humans.get(0).optimizeCollisions();
+        }
+        
+        // Optimize collisions for other humans but only those close to the player
+        if (!humans.isEmpty()) {
+            Human player = humans.get(0);
+            int playerX = player.getX();
+            int playerY = player.getY();
+            int visibilityDistance = 50 * game.tileSize; // Only process objects within this distance
+            
+            for(MovingObject object : blocks){
+                if(object instanceof Human){
+                    Human human = (Human)object;
+                    
+                    // Only optimize collisions for humans close to the player
+                    int humanX = human.getX();
+                    int humanY = human.getY();
+                    
+                    // Simple bounding box distance check
+                    if (Math.abs(humanX - playerX) < visibilityDistance && 
+                        Math.abs(humanY - playerY) < visibilityDistance) {
+                        human.optimizeCollisions();
+                    }
+                }
             }
         }
     }
