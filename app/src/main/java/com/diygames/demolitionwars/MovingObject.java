@@ -199,34 +199,26 @@ public class MovingObject extends MoveableGameObject implements Serializable {
     }
 
     /**
-    * The distance between object and this
-     */
-    public double distanceToThisObject(MovingObject object){
-        double distance =0;
-        if(getX()>object.getX()){
-            distance+=getX()-object.getX();
-        } else if(getX()<object.getX()){
-            distance+=object.getX()-getX();
-        }
-        if(getY()>object.getY()){
-            distance+=getY()-object.getY();
-        } else if(getY()<object.getY()){
-            distance+=object.getY()-getY();
-        }
-        return distance;
+    * Calculate Manhattan distance between this object and another object
+    * More efficient than Euclidean distance for simple collision checks
+    */
+    public double distanceToThisObject(MovingObject object) {
+        // Use absolute values for cleaner code
+        return Math.abs(getX() - object.getX()) + 
+               Math.abs(getY() - object.getY());
     }
 
     /**
-    * Writes all nearby blocks to the nearby blocks array to be used in collision calculations. Speeds up the collision detection.
-     */
-    public void optimizeCollisions(){
+    * Optimize collision detection by storing nearby objects
+    */
+    public void optimizeCollisions() {
         nearbyObjects.clear();
-        lastCollisionScanPosition[0]=getX();
-        lastCollisionScanPosition[1]=getY();
+        lastCollisionScanPosition[0] = getX();
+        lastCollisionScanPosition[1] = getY();
         
         int playerX = getX();
         int playerY = getY();
-        int maxDistance = 40 * game.tileSize; // Increased from 30 to 40 for better collision detection
+        int maxDistance = 40 * game.tileSize;
         
         // Quick bounding box check for better performance
         int minX = playerX - maxDistance;
@@ -234,14 +226,14 @@ public class MovingObject extends MoveableGameObject implements Serializable {
         int minY = playerY - maxDistance;
         int maxY = playerY + maxDistance;
         
-        for(MovingObject object : game.world.blocks){
-            if(object instanceof Obtainables){
+        // Use foreach loop for cleaner iteration
+        for (MovingObject object : game.world.blocks) {
+            if (object instanceof Obtainables) {
                 int objX = object.getX();
                 int objY = object.getY();
                 
                 // Simple bounding box check first (much faster than full distance calculation)
-                if(objX >= minX && objX <= maxX && objY >= minY && objY <= maxY) {
-                    // Include all objects in bounding box to avoid missing collisions
+                if (objX >= minX && objX <= maxX && objY >= minY && objY <= maxY) {
                     nearbyObjects.add(object);
                 }
             }
