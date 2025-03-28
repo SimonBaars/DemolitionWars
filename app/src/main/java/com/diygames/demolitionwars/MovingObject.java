@@ -62,43 +62,62 @@ public class MovingObject extends MoveableGameObject implements Serializable {
     * Makes everything fall :). Uses optimized collisions.
      */
     protected void gravity() {
-        boolean fall;
+        boolean fall = true;
         airtime++;
-        while(true){
-            fall=true;
-                for (MovingObject object : nearbyObjects) {
-                    if(object instanceof Block) {
-                        Block block = (Block)object;
-                        if (!game.imageLoader.hasNoCollision(block) || block instanceof BlockLadder) {
-                            int sizeY = this.getY() + airtime + (6 * game.tileSize);
-                            if(this instanceof Block){
-                                sizeY-=3*game.tileSize;
+        
+        // Skip unnecessary checks if no nearby objects
+        if (nearbyObjects.isEmpty()) {
+            addToMomentum(180, airtime);
+            return;
+        }
+        
+        // Maximum iterations to prevent infinite loops
+        int maxIterations = 5;
+        int iterations = 0;
+        
+        while(iterations < maxIterations) {
+            iterations++;
+            fall = true;
+            
+            int sizeY = this.getY() + airtime + (6 * game.tileSize);
+            if(this instanceof Block) {
+                sizeY -= 3 * game.tileSize;
+            }
+            
+            int checkX = this.getX() + 25;
+            
+            // Optimized check that only looks at nearby objects that are blocks
+            for (MovingObject object : nearbyObjects) {
+                if(object instanceof Block) {
+                    Block block = (Block)object;
+                    if (!game.imageLoader.hasNoCollision(block) || block instanceof BlockLadder) {
+                        if (block.collidesWith(checkX, sizeY)) {
+                            fall = false;
+                            hasCollided = false;
+                            if (inAir == 2) { 
+                                inAir = 0;
                             }
-                            if (block.collidesWith(this.getX() + 25, sizeY/* is size*/)) {
-                                fall = false;
-                                hasCollided = false;
-                                if (inAir == 2) { //If inAir==2 means that the player is in the air and still holding the A button (this is not good as he's contantly creating momentum upwards.
-                                    inAir=0;
-                                }
-                                break;
-                            }
+                            break;
                         }
                     }
                 }
-            if(!fall && airtime>=1){
+            }
+            
+            if(!fall && airtime >= 1) {
                 airtime--;
             } else {
                 break;
             }
         }
-        if (airtime>0) {
+        
+        if (airtime > 0) {
             addToMomentum(180, airtime);
         } else {
             if(!(this instanceof Bot)) {
                 addToMomentum(180, 0);
             }
-            if(this instanceof Obtainables){
-                inAir=0;
+            if(this instanceof Obtainables) {
+                inAir = 0;
             }
         }
     }
