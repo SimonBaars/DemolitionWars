@@ -1,11 +1,11 @@
 package com.demolitionwars.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Block/terrain entity.
@@ -56,7 +56,35 @@ public class Block extends GameEntity {
         this.moneyValue = calculateMoneyValue(type);
         
         createBody(world, x, y);
-        // TODO: Load sprite based on type
+        loadSprite(type);
+    }
+    
+    private void loadSprite(BlockType type) {
+        try {
+            String spriteName = getSpriteNameForType(type);
+            Texture texture = new Texture(Gdx.files.internal("sprites/" + spriteName + ".png"));
+            sprite = new Sprite(texture);
+            sprite.setSize(BLOCK_SIZE, BLOCK_SIZE);
+        } catch (Exception e) {
+            Gdx.app.log("Block", "Could not load sprite for " + type + ": " + e.getMessage());
+        }
+    }
+    
+    private String getSpriteNameForType(BlockType type) {
+        switch (type) {
+            case BRICK: return "brick";
+            case DIRT: return "dirt";
+            case GRASS: return "grass";
+            case PLANKS: return "planks";
+            case STEEL: return "steel";
+            case STONE: return "stone";
+            case UNBREAKABLE: return "unbreakable_rock";
+            case WOOL_RED: return "wool_red";
+            case WOOL_WHITE: return "wool_white";
+            case WOOL_BLACK: return "wool_black";
+            case WOOL_BLUE: return "wool_blue";
+            default: return "brick";
+        }
     }
     
     private void createBody(World world, float x, float y) {
@@ -85,7 +113,18 @@ public class Block extends GameEntity {
     
     @Override
     public void update(float delta) {
-        // Blocks don't need regular updates unless they're falling/breaking
+        // Update sprite position
+        if (sprite != null && body != null) {
+            Vector2 pos = body.getPosition();
+            sprite.setPosition(pos.x - BLOCK_SIZE / 2, pos.y - BLOCK_SIZE / 2);
+        }
+    }
+    
+    @Override
+    public void render(SpriteBatch batch) {
+        if (sprite != null && active) {
+            sprite.draw(batch);
+        }
     }
     
     /**

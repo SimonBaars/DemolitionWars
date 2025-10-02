@@ -1,11 +1,11 @@
 package com.demolitionwars.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 
 /**
  * Explosive entity (TNT, grenades, bombs, etc.)
@@ -58,7 +58,27 @@ public class Explosive extends GameEntity {
         createBody(world, x, y);
         body.setLinearVelocity(velocityX, velocityY);
         
-        // TODO: Load appropriate sprite
+        loadSprite(type);
+    }
+    
+    private void loadSprite(ExplosiveType type) {
+        try {
+            String spriteName = "tnt"; // Default to TNT
+            switch (type) {
+                case TNT: spriteName = "tnt"; break;
+                case FIREBOMB: spriteName = "firebomb"; break;
+                case GRENADE: spriteName = "grenade"; break;
+                case NAPALM: spriteName = "napalm"; break;
+                case NUKE: spriteName = "nuke"; break;
+                case SCATTERBOMB: spriteName = "scatterbomb"; break;
+                case SUPERNOVA: spriteName = "supernova"; break;
+            }
+            Texture texture = new Texture(Gdx.files.internal("sprites/" + spriteName + ".png"));
+            sprite = new Sprite(texture);
+            sprite.setSize(32, 32);
+        } catch (Exception e) {
+            Gdx.app.log("Explosive", "Could not load sprite for " + type + ": " + e.getMessage());
+        }
     }
     
     private void createBody(World world, float x, float y) {
@@ -96,6 +116,20 @@ public class Explosive extends GameEntity {
         
         if (elapsedTime >= fuseTime) {
             explode();
+        }
+        
+        // Update sprite position
+        if (sprite != null && body != null) {
+            Vector2 pos = body.getPosition();
+            sprite.setPosition(pos.x - 16, pos.y - 16);
+            sprite.setRotation((float) Math.toDegrees(body.getAngle()));
+        }
+    }
+    
+    @Override
+    public void render(SpriteBatch batch) {
+        if (sprite != null && active && !exploded) {
+            sprite.draw(batch);
         }
     }
     
