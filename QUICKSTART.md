@@ -4,7 +4,7 @@ Quick guide to get started developing on DemolitionWars.
 
 ## Prerequisites
 
-- **JDK 11+** (Required for Gradle 8.0)
+- **JDK 11+** (JDK 17 required for libGDX version)
 - **Android SDK** with API 33 installed
 - **Android Studio** (recommended) or IntelliJ IDEA
 - **Git**

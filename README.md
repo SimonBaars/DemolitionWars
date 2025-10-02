@@ -46,7 +46,7 @@ A complete port to the libGDX game engine featuring:
 ## Building
 
 ### Prerequisites
-- JDK 11 or higher
+- JDK 11 or higher (JDK 17 required for libGDX version)
 - Android SDK with API 33
 - Gradle 8.0 (included via wrapper)
 
