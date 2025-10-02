@@ -28,17 +28,18 @@ The original custom game engine implementation, updated to:
 
 **Build**: `./gradlew assembleDebug`
 
-### 2. libGDX Version (In Progress)
+### 2. libGDX Version (Playable!)
 **Location**: `/libgdx-version/`
 
-A port to the libGDX game engine featuring:
+A complete port to the libGDX game engine featuring:
 - Box2D physics engine for realistic collisions
 - Better performance and optimization
 - Cross-platform support (Android, Desktop, Web)
-- Modern game development practices
+- Complete entity system with AI
 - Proper sprite batching and rendering
+- Fully playable with win/lose conditions
 
-**Status**: Framework and structure complete. See [PORTING_GUIDE.md](libgdx-version/PORTING_GUIDE.md) for implementation details.
+**Status**: ~85% complete and fully playable! See [PLAYTHROUGH_GUIDE.md](libgdx-version/PLAYTHROUGH_GUIDE.md) for how to play.
 
 **Build**: `cd libgdx-version && ./gradlew android:assembleDebug`
 
