@@ -228,14 +228,14 @@ libgdx-version/android/build/outputs/apk/
 ## Technology Stack
 
 ### Original Version
-- **Language**: Java 11
+- **Language**: Java 17
 - **Framework**: Custom Game Engine
 - **Build**: Gradle 8.0
 - **Min Android**: API 31 (Android 12)
 - **Target Android**: API 33
 
 ### libGDX Version
-- **Language**: Java 11
+- **Language**: Java 17
 - **Framework**: libGDX 1.12.1
 - **Physics**: Box2D
 - **Build**: Gradle 8.0
