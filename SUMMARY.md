@@ -23,7 +23,7 @@ Given the conflict between "smallest possible changes" and "port to a proper gam
 - **Compile SDK**: Updated from 28 to 33
 - **Target SDK**: Updated from 24 to 33
 - **Min SDK**: Updated from 14 to 31 (Android 12+)
-- **Java Compatibility**: Updated from 1.8 to 11
+- **Java Compatibility**: Updated from 1.8 to 17
 - **Dependencies**: Migrated from `android.support` to AndroidX
 
 #### 2. Android Manifest Updates
@@ -189,7 +189,7 @@ libgdx-version/
 ### Modern Build System
 - Gradle 8.0 with latest Android plugin
 - AndroidX libraries
-- Java 11 compatibility
+- Java 17 compatibility
 - Automated builds via GitHub Actions
 
 ### libGDX Advantages
@@ -283,7 +283,7 @@ See `IMPLEMENTATION_STATUS.md` for complete roadmap.
 ## 🔧 Technical Details
 
 ### Build Requirements
-- JDK 11+
+- JDK 17+
 - Android SDK with API 33
 - Gradle 8.0 (included via wrapper)
 - Internet connection (for dependency downloads)
