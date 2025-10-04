@@ -41,15 +41,16 @@ public abstract class GameEntity {
             TextureRegion currentFrame = animation.getKeyFrame(animationTime, true);
             float x = body.getPosition().x - currentFrame.getRegionWidth() / 2;
             float y = body.getPosition().y - currentFrame.getRegionHeight() / 2;
+            float width = currentFrame.getRegionWidth();
+            float height = currentFrame.getRegionHeight();
             
-            // Flip sprite based on facing direction
-            if (!facingRight && !currentFrame.isFlipX()) {
-                currentFrame.flip(true, false);
-            } else if (facingRight && currentFrame.isFlipX()) {
-                currentFrame.flip(true, false);
+            // Draw with proper scaling based on facing direction
+            if (!facingRight) {
+                // Flip horizontally by drawing with negative width
+                batch.draw(currentFrame, x + width, y, -width, height);
+            } else {
+                batch.draw(currentFrame, x, y, width, height);
             }
-            
-            batch.draw(currentFrame, x, y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
         } else if (sprite != null) {
             // Render static sprite
             if (body != null) {

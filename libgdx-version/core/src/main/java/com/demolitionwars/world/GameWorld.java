@@ -35,33 +35,29 @@ public class GameWorld {
     
     /**
      * Generate terrain layers across the entire map (matching original)
+     * Original uses inverted Y (Android top-left origin), we use bottom-left (Box2D)
+     * Player spawns at (2974, 2848), grass should be at around y=2800
+     * 
+     * Each "tile" in the original is 192x192 (tileSize * 3), containing 3x3 blocks of 64x64
      */
     private void generateTerrain(List<GameEntity> entities) {
-        // Layer positions (from bottom to top, matching original)
-        int LAYER_BEDROCK = -1;
-        int LAYER_STONE_1 = 0;
-        int LAYER_STONE_2 = 1;
-        int LAYER_DIRT_1 = 2;
-        int LAYER_DIRT_2 = 3;
-        int LAYER_GRASS = 4;
+        // Calculate grass layer position to be just below player spawn
+        float GRASS_LEVEL = 2800f; // Just below player spawn at 2848
         
         // Generate layers across entire map width
-        for (int x = 0; x < MAP_WIDTH; x += (int)TILE_SIZE) {
-            createLayer(entities, Block.BlockType.UNBREAKABLE, LAYER_BEDROCK, x);
-            createLayer(entities, Block.BlockType.STONE, LAYER_STONE_1, x);
-            createLayer(entities, Block.BlockType.STONE, LAYER_STONE_2, x);
-            createLayer(entities, Block.BlockType.DIRT, LAYER_DIRT_1, x);
-            createLayer(entities, Block.BlockType.DIRT, LAYER_DIRT_2, x);
-            createLayer(entities, Block.BlockType.GRASS, LAYER_GRASS, x);
+        // Using BLOCK_SIZE (64) for individual blocks, not TILE_SIZE (192)
+        for (float x = 0; x < MAP_WIDTH; x += BLOCK_SIZE) {
+            // Layers from bottom to top (6 layers total, each TILE_SIZE tall = 192)
+            // But each layer needs multiple blocks vertically too
+            for (int layerBlock = 0; layerBlock < 3; layerBlock++) {
+                entities.add(new Block(physicsWorld, x, GRASS_LEVEL - 5 * TILE_SIZE + layerBlock * BLOCK_SIZE, Block.BlockType.UNBREAKABLE)); // Bedrock
+                entities.add(new Block(physicsWorld, x, GRASS_LEVEL - 4 * TILE_SIZE + layerBlock * BLOCK_SIZE, Block.BlockType.STONE));
+                entities.add(new Block(physicsWorld, x, GRASS_LEVEL - 3 * TILE_SIZE + layerBlock * BLOCK_SIZE, Block.BlockType.STONE));
+                entities.add(new Block(physicsWorld, x, GRASS_LEVEL - 2 * TILE_SIZE + layerBlock * BLOCK_SIZE, Block.BlockType.DIRT));
+                entities.add(new Block(physicsWorld, x, GRASS_LEVEL - 1 * TILE_SIZE + layerBlock * BLOCK_SIZE, Block.BlockType.DIRT));
+                entities.add(new Block(physicsWorld, x, GRASS_LEVEL + layerBlock * BLOCK_SIZE, Block.BlockType.GRASS));
+            }
         }
-    }
-    
-    /**
-     * Create a single terrain layer block
-     */
-    private void createLayer(List<GameEntity> entities, Block.BlockType type, int layer, int x) {
-        float y = MAP_HEIGHT - (layer * TILE_SIZE);
-        entities.add(new Block(physicsWorld, x, y, type));
     }
     
     /**
@@ -94,6 +90,9 @@ public class GameWorld {
      * Place objects in the world based on the layout (matching original)
      */
     private void placeWorldObjects(List<GameEntity> entities, int[][] worldLayout) {
+        // World structures start at grass level + some offset to be above ground
+        float STRUCTURE_BASE_Y = 2800f + (6 * TILE_SIZE); // Start above grass layer
+        
         // Generate both sides (team 0 and team 1)
         for (int team = 0; team < 2; team++) {
             int rowOffset = 0;
@@ -117,7 +116,7 @@ public class GameWorld {
                     
                     // Calculate position
                     float xPos = (mirrorCol * TILE_SIZE) + ((TILE_SIZE * worldLayout[0].length) * team);
-                    float yPos = MAP_HEIGHT - ((5 + rowOffset) * TILE_SIZE);
+                    float yPos = STRUCTURE_BASE_Y + (rowOffset * TILE_SIZE);
                     
                     // Create the appropriate object
                     createObject(entities, blockType, xPos, yPos, team != 0);
@@ -131,41 +130,56 @@ public class GameWorld {
     
     /**
      * Create object based on type ID
+     * Each tile position (x, y) needs to create a 3x3 grid of 64x64 blocks
      */
     private void createObject(List<GameEntity> entities, int blockType, float x, float y, boolean team) {
+        // For blocks, create 3x3 grid to fill the 192x192 tile
+        Block.BlockType type = null;
+        
         switch (blockType) {
             case 1: // Brick
             case 7: // Brick alt
-                entities.add(new Block(physicsWorld, x, y, Block.BlockType.BRICK));
+                type = Block.BlockType.BRICK;
                 break;
             case 6: // Steel
-                entities.add(new Block(physicsWorld, x, y, Block.BlockType.STEEL));
+                type = Block.BlockType.STEEL;
                 break;
             case 9: // Planks
-                entities.add(new Block(physicsWorld, x, y, Block.BlockType.PLANKS));
+                type = Block.BlockType.PLANKS;
                 break;
             case 4: // Wool red
-                entities.add(new Block(physicsWorld, x, y, Block.BlockType.WOOL_RED));
+                type = Block.BlockType.WOOL_RED;
                 break;
             case 5: // Wool white
-                entities.add(new Block(physicsWorld, x, y, Block.BlockType.WOOL_WHITE));
+                type = Block.BlockType.WOOL_WHITE;
                 break;
-            case 10: // Demolist (merchant)
-                entities.add(new Merchant(physicsWorld, x, y, team, Merchant.MerchantType.EXPLOSIVES));
-                break;
+            case 10: // Demolist (merchant) - spawn in center of tile
+                entities.add(new Merchant(physicsWorld, x + TILE_SIZE / 2, y + TILE_SIZE / 2, team, Merchant.MerchantType.EXPLOSIVES));
+                return;
             case 11: // Blockseller (merchant)
-                entities.add(new Merchant(physicsWorld, x, y, team, Merchant.MerchantType.BLOCKS));
-                break;
+                entities.add(new Merchant(physicsWorld, x + TILE_SIZE / 2, y + TILE_SIZE / 2, team, Merchant.MerchantType.BLOCKS));
+                return;
             case 12: // Weaponclerk (merchant)
-                entities.add(new Merchant(physicsWorld, x, y, team, Merchant.MerchantType.WEAPONS));
-                break;
+                entities.add(new Merchant(physicsWorld, x + TILE_SIZE / 2, y + TILE_SIZE / 2, team, Merchant.MerchantType.WEAPONS));
+                return;
             case 14: // Guard
-                entities.add(new Guard(physicsWorld, x, y, team));
-                break;
+                entities.add(new Guard(physicsWorld, x + TILE_SIZE / 2, y + TILE_SIZE / 2, team));
+                return;
             case 15: // King
-                entities.add(new King(physicsWorld, x, y, team));
-                break;
+                entities.add(new King(physicsWorld, x + TILE_SIZE / 2, y + TILE_SIZE / 2, team));
+                return;
             // 2, 3, 8, 13 are doors, ladders, poles - skip for now
+            default:
+                return;
+        }
+        
+        // Create 3x3 blocks to fill the tile
+        if (type != null) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    entities.add(new Block(physicsWorld, x + i * BLOCK_SIZE, y + j * BLOCK_SIZE, type));
+                }
+            }
         }
     }
 }
