@@ -67,17 +67,18 @@ public class GameScreen implements Screen, ContactListener {
         // Initialize Box2D
         Box2D.init();
         
-        // Create physics world with gravity
-        world = new World(new Vector2(0, -30f), true);
+        // Create physics world with gravity (stronger gravity for better feel)
+        world = new World(new Vector2(0, -50f), true);
         world.setContactListener(this);
         
-        // Set up rendering
+        // Set up rendering with proper viewport size
+        // Using larger viewport to see more of the world (match original game's feel)
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(1920, 1080, camera);
+        viewport = new ExtendViewport(2400, 1600, camera);
         font = new BitmapFont();
         font.setColor(Color.WHITE);
-        font.getData().setScale(2f);
+        font.getData().setScale(3f);
         
         // Debug renderer for physics
         debugRenderer = new Box2DDebugRenderer();
@@ -85,7 +86,8 @@ public class GameScreen implements Screen, ContactListener {
         // Initialize game world
         gameWorld = new GameWorld(world);
         
-        // Create player
+        // Create player at spawn position (matching original)
+        // Original spawns at (2974, 2848) in world coordinates
         player = new Player(world, 2974, 2848);
         entities.add(player);
         
@@ -181,7 +183,7 @@ public class GameScreen implements Screen, ContactListener {
     private void handleInput(float delta) {
         if (player == null || !player.isActive()) return;
         
-        // Movement
+        // Keyboard controls
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.moveLeft();
         }
@@ -208,6 +210,41 @@ public class GameScreen implements Screen, ContactListener {
         // Place explosive
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             placeExplosive();
+        }
+        
+        // Touch controls for mobile
+        handleTouchInput();
+    }
+    
+    private void handleTouchInput() {
+        if (!Gdx.input.isTouched()) return;
+        
+        int screenWidth = Gdx.graphics.getWidth();
+        int screenHeight = Gdx.graphics.getHeight();
+        
+        for (int i = 0; i < 5; i++) { // Support up to 5 touches
+            if (!Gdx.input.isTouched(i)) continue;
+            
+            int touchX = Gdx.input.getX(i);
+            int touchY = Gdx.input.getY(i);
+            
+            // Left side = move left
+            if (touchX < screenWidth / 3) {
+                player.moveLeft();
+            }
+            // Right side = move right
+            else if (touchX > screenWidth * 2 / 3) {
+                player.moveRight();
+            }
+            
+            // Top of screen = jump
+            if (touchY < screenHeight / 3) {
+                player.jump();
+            }
+            // Bottom right corner = place explosive
+            else if (touchX > screenWidth * 2 / 3 && touchY > screenHeight * 2 / 3) {
+                placeExplosive();
+            }
         }
     }
     

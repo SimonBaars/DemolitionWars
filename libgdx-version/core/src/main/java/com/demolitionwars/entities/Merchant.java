@@ -2,8 +2,10 @@ package com.demolitionwars.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -11,6 +13,8 @@ import com.badlogic.gdx.physics.box2d.*;
  * Merchant NPC that sells items to the player.
  */
 public class Merchant extends GameEntity {
+    
+    private static final float ANIMATION_FRAME_DURATION = 0.15f;
     
     public enum MerchantType {
         WEAPONS,
@@ -52,10 +56,21 @@ public class Merchant extends GameEntity {
     
     private void loadSprite() {
         try {
+            // Load sprite sheet (512x128 with 8 frames of 64x64 each)
             String spriteName = team ? "merchant_blauw" : "merchant_zwart";
             Texture texture = new Texture(Gdx.files.internal("sprites/" + spriteName + ".png"));
-            sprite = new Sprite(texture);
-            sprite.setSize(MERCHANT_RADIUS * 2, MERCHANT_RADIUS * 2);
+            TextureRegion[][] tmp = TextureRegion.split(texture, 64, 128);
+            
+            // Extract frames (8 frames in first row)
+            TextureRegion[] frames = new TextureRegion[8];
+            for (int i = 0; i < 8; i++) {
+                frames[i] = tmp[0][i];
+            }
+            
+            // Create animation
+            animation = new Animation<>(ANIMATION_FRAME_DURATION, frames);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
+            
         } catch (Exception e) {
             Gdx.app.log("Merchant", "Could not load sprite: " + e.getMessage());
         }
@@ -63,18 +78,9 @@ public class Merchant extends GameEntity {
     
     @Override
     public void update(float delta) {
+        // Update animation time
+        animationTime += delta;
         // Merchants don't move
-        if (sprite != null && body != null) {
-            Vector2 pos = body.getPosition();
-            sprite.setPosition(pos.x - MERCHANT_RADIUS, pos.y - MERCHANT_RADIUS);
-        }
-    }
-    
-    @Override
-    public void render(SpriteBatch batch) {
-        if (sprite != null && active) {
-            sprite.draw(batch);
-        }
     }
     
     public MerchantType getType() {

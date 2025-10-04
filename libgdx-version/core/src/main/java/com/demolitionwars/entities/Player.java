@@ -2,8 +2,10 @@ package com.demolitionwars.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -15,10 +17,13 @@ import java.util.List;
  */
 public class Player extends GameEntity {
     
+    private static final float PLAYER_WIDTH = 64f;
+    private static final float PLAYER_HEIGHT = 64f;
     private static final float PLAYER_RADIUS = 32f;
     private static final float MOVE_FORCE = 800f;
     private static final float JUMP_FORCE = 1200f;
     private static final float MAX_VELOCITY = 400f;
+    private static final float ANIMATION_FRAME_DURATION = 0.1f;
     
     private int health = 100;
     private int money = 1000;
@@ -37,10 +42,20 @@ public class Player extends GameEntity {
     
     private void loadSprite() {
         try {
+            // Load sprite sheet (512x128 with 8 frames of 64x64 each)
             Texture texture = new Texture(Gdx.files.internal("sprites/speler_zwart.png"));
-            sprite = new Sprite(texture);
-            sprite.setSize(PLAYER_RADIUS * 2, PLAYER_RADIUS * 2);
-            sprite.setOriginCenter();
+            TextureRegion[][] tmp = TextureRegion.split(texture, 64, 128);
+            
+            // Extract frames (8 frames in first row)
+            TextureRegion[] frames = new TextureRegion[8];
+            for (int i = 0; i < 8; i++) {
+                frames[i] = tmp[0][i];
+            }
+            
+            // Create animation
+            animation = new Animation<>(ANIMATION_FRAME_DURATION, frames);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
+            
         } catch (Exception e) {
             Gdx.app.log("Player", "Could not load sprite: " + e.getMessage());
         }
@@ -74,24 +89,21 @@ public class Player extends GameEntity {
     
     @Override
     public void update(float delta) {
-        // Limit horizontal velocity
+        // Update animation time
+        animationTime += delta;
+        
+        // Update facing direction based on velocity
         Vector2 vel = body.getLinearVelocity();
+        if (vel.x > 0.1f) {
+            facingRight = true;
+        } else if (vel.x < -0.1f) {
+            facingRight = false;
+        }
+        
+        // Limit horizontal velocity
         if (Math.abs(vel.x) > MAX_VELOCITY) {
             vel.x = Math.signum(vel.x) * MAX_VELOCITY;
             body.setLinearVelocity(vel);
-        }
-        
-        // Update sprite position
-        if (sprite != null && body != null) {
-            Vector2 pos = body.getPosition();
-            sprite.setPosition(pos.x - PLAYER_RADIUS, pos.y - PLAYER_RADIUS);
-        }
-    }
-    
-    @Override
-    public void render(SpriteBatch batch) {
-        if (sprite != null && active) {
-            sprite.draw(batch);
         }
     }
     

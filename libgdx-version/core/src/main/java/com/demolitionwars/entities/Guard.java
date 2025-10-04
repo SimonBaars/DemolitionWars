@@ -2,8 +2,10 @@ package com.demolitionwars.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -15,6 +17,7 @@ public class Guard extends GameEntity {
     private static final float GUARD_RADIUS = 32f;
     private static final float PATROL_SPEED = 100f;
     private static final float PATROL_DISTANCE = 300f;
+    private static final float ANIMATION_FRAME_DURATION = 0.1f;
     
     private int health = 100;
     private boolean team;
@@ -57,10 +60,21 @@ public class Guard extends GameEntity {
     
     private void loadSprite() {
         try {
+            // Load sprite sheet (512x128 with 8 frames of 64x64 each)
             String spriteName = team ? "guard_blauw" : "guard_zwart";
             Texture texture = new Texture(Gdx.files.internal("sprites/" + spriteName + ".png"));
-            sprite = new Sprite(texture);
-            sprite.setSize(GUARD_RADIUS * 2, GUARD_RADIUS * 2);
+            TextureRegion[][] tmp = TextureRegion.split(texture, 64, 128);
+            
+            // Extract frames (8 frames in first row)
+            TextureRegion[] frames = new TextureRegion[8];
+            for (int i = 0; i < 8; i++) {
+                frames[i] = tmp[0][i];
+            }
+            
+            // Create animation
+            animation = new Animation<>(ANIMATION_FRAME_DURATION, frames);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
+            
         } catch (Exception e) {
             Gdx.app.log("Guard", "Could not load sprite: " + e.getMessage());
         }
@@ -70,31 +84,24 @@ public class Guard extends GameEntity {
     public void update(float delta) {
         if (!active) return;
         
+        // Update animation time
+        animationTime += delta;
+        
         Vector2 pos = body.getPosition();
         
         // Patrol logic
         if (movingRight) {
             body.setLinearVelocity(PATROL_SPEED, body.getLinearVelocity().y);
+            facingRight = true;
             if (pos.x > patrolRight) {
                 movingRight = false;
             }
         } else {
             body.setLinearVelocity(-PATROL_SPEED, body.getLinearVelocity().y);
+            facingRight = false;
             if (pos.x < patrolLeft) {
                 movingRight = true;
             }
-        }
-        
-        // Update sprite position
-        if (sprite != null) {
-            sprite.setPosition(pos.x - GUARD_RADIUS, pos.y - GUARD_RADIUS);
-        }
-    }
-    
-    @Override
-    public void render(SpriteBatch batch) {
-        if (sprite != null && active) {
-            sprite.draw(batch);
         }
     }
     
