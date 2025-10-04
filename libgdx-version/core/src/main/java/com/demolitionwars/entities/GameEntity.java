@@ -2,6 +2,8 @@ package com.demolitionwars.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 
 /**
@@ -9,14 +11,17 @@ import com.badlogic.gdx.physics.box2d.Body;
  * 
  * Provides common functionality for entities with:
  * - Box2D physics body
- * - Sprite rendering
+ * - Sprite rendering (static or animated)
  * - Update/render lifecycle
  */
 public abstract class GameEntity {
     
     protected Body body;
     protected Sprite sprite;
+    protected Animation<TextureRegion> animation;
+    protected float animationTime = 0f;
     protected boolean active = true;
+    protected boolean facingRight = true;
     
     /**
      * Update entity state
@@ -29,8 +34,25 @@ public abstract class GameEntity {
      * @param batch SpriteBatch to draw with
      */
     public void render(SpriteBatch batch) {
-        if (sprite != null && active) {
-            // Sync sprite position with physics body
+        if (!active) return;
+        
+        if (animation != null && body != null) {
+            // Render animated sprite
+            TextureRegion currentFrame = animation.getKeyFrame(animationTime, true);
+            float x = body.getPosition().x - currentFrame.getRegionWidth() / 2;
+            float y = body.getPosition().y - currentFrame.getRegionHeight() / 2;
+            float width = currentFrame.getRegionWidth();
+            float height = currentFrame.getRegionHeight();
+            
+            // Draw with proper scaling based on facing direction
+            if (!facingRight) {
+                // Flip horizontally by drawing with negative width
+                batch.draw(currentFrame, x + width, y, -width, height);
+            } else {
+                batch.draw(currentFrame, x, y, width, height);
+            }
+        } else if (sprite != null) {
+            // Render static sprite
             if (body != null) {
                 sprite.setPosition(
                     body.getPosition().x - sprite.getWidth() / 2,

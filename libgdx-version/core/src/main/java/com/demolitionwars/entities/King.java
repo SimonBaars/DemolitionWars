@@ -2,8 +2,10 @@ package com.demolitionwars.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -13,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.*;
 public class King extends GameEntity {
     
     private static final float KING_RADIUS = 32f;
+    private static final float ANIMATION_FRAME_DURATION = 0.15f;
     
     private int health = 500; // King has lots of health
     private boolean team;
@@ -47,10 +50,21 @@ public class King extends GameEntity {
     
     private void loadSprite() {
         try {
+            // Load sprite sheet (512x128 with 8 frames of 64x64 each)
             String spriteName = team ? "king_blauw" : "king_zwart";
             Texture texture = new Texture(Gdx.files.internal("sprites/" + spriteName + ".png"));
-            sprite = new Sprite(texture);
-            sprite.setSize(KING_RADIUS * 2, KING_RADIUS * 2);
+            TextureRegion[][] tmp = TextureRegion.split(texture, 64, 128);
+            
+            // Extract frames (8 frames in first row)
+            TextureRegion[] frames = new TextureRegion[8];
+            for (int i = 0; i < 8; i++) {
+                frames[i] = tmp[0][i];
+            }
+            
+            // Create animation
+            animation = new Animation<>(ANIMATION_FRAME_DURATION, frames);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
+            
         } catch (Exception e) {
             Gdx.app.log("King", "Could not load sprite: " + e.getMessage());
         }
@@ -60,20 +74,10 @@ public class King extends GameEntity {
     public void update(float delta) {
         if (!active) return;
         
-        // King doesn't move much, just stays in place
-        Vector2 pos = body.getPosition();
+        // Update animation time
+        animationTime += delta;
         
-        // Update sprite position
-        if (sprite != null) {
-            sprite.setPosition(pos.x - KING_RADIUS, pos.y - KING_RADIUS);
-        }
-    }
-    
-    @Override
-    public void render(SpriteBatch batch) {
-        if (sprite != null && active) {
-            sprite.draw(batch);
-        }
+        // King doesn't move much, just stays in place
     }
     
     public boolean takeDamage(int damage) {

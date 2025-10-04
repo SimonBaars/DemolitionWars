@@ -67,17 +67,18 @@ public class GameScreen implements Screen, ContactListener {
         // Initialize Box2D
         Box2D.init();
         
-        // Create physics world with gravity
-        world = new World(new Vector2(0, -30f), true);
+        // Create physics world with gravity (stronger gravity for better feel)
+        world = new World(new Vector2(0, -50f), true);
         world.setContactListener(this);
         
-        // Set up rendering
+        // Set up rendering with proper viewport size
+        // Using larger viewport to see more of the world (match original game's feel)
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(1920, 1080, camera);
+        viewport = new ExtendViewport(2400, 1600, camera);
         font = new BitmapFont();
         font.setColor(Color.WHITE);
-        font.getData().setScale(2f);
+        font.getData().setScale(3f);
         
         // Debug renderer for physics
         debugRenderer = new Box2DDebugRenderer();
@@ -85,7 +86,8 @@ public class GameScreen implements Screen, ContactListener {
         // Initialize game world
         gameWorld = new GameWorld(world);
         
-        // Create player
+        // Create player at spawn position (matching original)
+        // Original spawns at (2974, 2848) in world coordinates
         player = new Player(world, 2974, 2848);
         entities.add(player);
         
@@ -108,14 +110,21 @@ public class GameScreen implements Screen, ContactListener {
         // Update game logic
         update(delta);
         
-        // Update camera to follow player
+        // Update camera to follow player (similar to original viewport behavior)
         if (player != null && player.getBody() != null) {
             Vector2 playerPos = player.getBody().getPosition();
-            camera.position.set(playerPos.x, playerPos.y, 0);
+            
+            // Position camera so player is at 1/3 from left and 2/3 from bottom
+            // (matching original viewport's setPlayerPositionOnScreen(2, 2))
+            float viewportWidth = viewport.getWorldWidth();
+            float viewportHeight = viewport.getWorldHeight();
+            
+            camera.position.x = playerPos.x - viewportWidth / 3;
+            camera.position.y = playerPos.y - viewportHeight / 3;
             
             // Clamp camera to world bounds
-            float halfViewportWidth = viewport.getWorldWidth() / 2;
-            float halfViewportHeight = viewport.getWorldHeight() / 2;
+            float halfViewportWidth = viewportWidth / 2;
+            float halfViewportHeight = viewportHeight / 2;
             camera.position.x = Math.max(halfViewportWidth, Math.min(DemolitionWarsGame.WORLD_WIDTH - halfViewportWidth, camera.position.x));
             camera.position.y = Math.max(halfViewportHeight, Math.min(DemolitionWarsGame.WORLD_HEIGHT - halfViewportHeight, camera.position.y));
         }
@@ -181,7 +190,7 @@ public class GameScreen implements Screen, ContactListener {
     private void handleInput(float delta) {
         if (player == null || !player.isActive()) return;
         
-        // Movement
+        // Keyboard controls
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.moveLeft();
         }
@@ -208,6 +217,41 @@ public class GameScreen implements Screen, ContactListener {
         // Place explosive
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             placeExplosive();
+        }
+        
+        // Touch controls for mobile
+        handleTouchInput();
+    }
+    
+    private void handleTouchInput() {
+        if (!Gdx.input.isTouched()) return;
+        
+        int screenWidth = Gdx.graphics.getWidth();
+        int screenHeight = Gdx.graphics.getHeight();
+        
+        for (int i = 0; i < 5; i++) { // Support up to 5 touches
+            if (!Gdx.input.isTouched(i)) continue;
+            
+            int touchX = Gdx.input.getX(i);
+            int touchY = Gdx.input.getY(i);
+            
+            // Left side = move left
+            if (touchX < screenWidth / 3) {
+                player.moveLeft();
+            }
+            // Right side = move right
+            else if (touchX > screenWidth * 2 / 3) {
+                player.moveRight();
+            }
+            
+            // Top of screen = jump
+            if (touchY < screenHeight / 3) {
+                player.jump();
+            }
+            // Bottom right corner = place explosive
+            else if (touchX > screenWidth * 2 / 3 && touchY > screenHeight * 2 / 3) {
+                placeExplosive();
+            }
         }
     }
     
@@ -246,14 +290,15 @@ public class GameScreen implements Screen, ContactListener {
         batch.begin();
         
         // Draw player stats in top-left corner (in screen space)
-        float screenX = camera.position.x - viewport.getWorldWidth() / 2 + 20;
-        float screenY = camera.position.y + viewport.getWorldHeight() / 2 - 40;
+        float screenX = camera.position.x - viewport.getWorldWidth() / 2 + 50;
+        float screenY = camera.position.y + viewport.getWorldHeight() / 2 - 80;
         
         if (player != null && player.isActive()) {
             font.draw(batch, "Health: " + player.getHealth() + "%", screenX, screenY);
-            font.draw(batch, "Money: $" + player.getMoney(), screenX, screenY - 30);
-            font.draw(batch, "Press F to place TNT ($200)", screenX, screenY - 60);
-            font.draw(batch, "Use Arrow Keys/WASD to move, SPACE to jump", screenX, screenY - 90);
+            font.draw(batch, "Money: $" + player.getMoney(), screenX, screenY - 60);
+            font.draw(batch, "Press F or tap bottom-right to place TNT ($200)", screenX, screenY - 120);
+            font.draw(batch, "Desktop: Arrow Keys/WASD to move, SPACE to jump", screenX, screenY - 180);
+            font.draw(batch, "Mobile: Tap left/right to move, top to jump", screenX, screenY - 240);
         }
         
         batch.end();
