@@ -110,14 +110,21 @@ public class GameScreen implements Screen, ContactListener {
         // Update game logic
         update(delta);
         
-        // Update camera to follow player
+        // Update camera to follow player (similar to original viewport behavior)
         if (player != null && player.getBody() != null) {
             Vector2 playerPos = player.getBody().getPosition();
-            camera.position.set(playerPos.x, playerPos.y, 0);
+            
+            // Position camera so player is at 1/3 from left and 2/3 from bottom
+            // (matching original viewport's setPlayerPositionOnScreen(2, 2))
+            float viewportWidth = viewport.getWorldWidth();
+            float viewportHeight = viewport.getWorldHeight();
+            
+            camera.position.x = playerPos.x - viewportWidth / 3;
+            camera.position.y = playerPos.y - viewportHeight / 3;
             
             // Clamp camera to world bounds
-            float halfViewportWidth = viewport.getWorldWidth() / 2;
-            float halfViewportHeight = viewport.getWorldHeight() / 2;
+            float halfViewportWidth = viewportWidth / 2;
+            float halfViewportHeight = viewportHeight / 2;
             camera.position.x = Math.max(halfViewportWidth, Math.min(DemolitionWarsGame.WORLD_WIDTH - halfViewportWidth, camera.position.x));
             camera.position.y = Math.max(halfViewportHeight, Math.min(DemolitionWarsGame.WORLD_HEIGHT - halfViewportHeight, camera.position.y));
         }
@@ -283,14 +290,15 @@ public class GameScreen implements Screen, ContactListener {
         batch.begin();
         
         // Draw player stats in top-left corner (in screen space)
-        float screenX = camera.position.x - viewport.getWorldWidth() / 2 + 20;
-        float screenY = camera.position.y + viewport.getWorldHeight() / 2 - 40;
+        float screenX = camera.position.x - viewport.getWorldWidth() / 2 + 50;
+        float screenY = camera.position.y + viewport.getWorldHeight() / 2 - 80;
         
         if (player != null && player.isActive()) {
             font.draw(batch, "Health: " + player.getHealth() + "%", screenX, screenY);
-            font.draw(batch, "Money: $" + player.getMoney(), screenX, screenY - 30);
-            font.draw(batch, "Press F to place TNT ($200)", screenX, screenY - 60);
-            font.draw(batch, "Use Arrow Keys/WASD to move, SPACE to jump", screenX, screenY - 90);
+            font.draw(batch, "Money: $" + player.getMoney(), screenX, screenY - 60);
+            font.draw(batch, "Press F or tap bottom-right to place TNT ($200)", screenX, screenY - 120);
+            font.draw(batch, "Desktop: Arrow Keys/WASD to move, SPACE to jump", screenX, screenY - 180);
+            font.draw(batch, "Mobile: Tap left/right to move, top to jump", screenX, screenY - 240);
         }
         
         batch.end();
