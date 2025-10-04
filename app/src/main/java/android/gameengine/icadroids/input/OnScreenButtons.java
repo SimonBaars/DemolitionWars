@@ -107,38 +107,26 @@ public class OnScreenButtons{
 	 *            The state to set it to
 	 */
 	private static void setButtonState(int buttonId, boolean state) {
-		switch (buttonId) {
-		case R.id.buttonA:
+		if (buttonId == R.id.buttonA) {
 			buttonA = state;
-			break;
-		case R.id.buttonB:
+		} else if (buttonId == R.id.buttonB) {
 			buttonB = state;
-			break;
-		case R.id.buttonX:
+		} else if (buttonId == R.id.buttonX) {
 			buttonX = state;
-			break;
-		case R.id.buttonY:
+		} else if (buttonId == R.id.buttonY) {
 			buttonY = state;
-			break;
-		case R.id.dpadUp:
+		} else if (buttonId == R.id.dpadUp) {
 			dPadUp = state;
-			break;
-		case R.id.dpadDown:
+		} else if (buttonId == R.id.dpadDown) {
 			dPadDown = state;
-			break;
-		case R.id.dpadLeft:
+		} else if (buttonId == R.id.dpadLeft) {
 			dPadLeft = state;
-			break;
-		case R.id.dpadRight:
+		} else if (buttonId == R.id.dpadRight) {
 			dPadRight = state;
-			break;
-		case R.id.buttonSelect:
+		} else if (buttonId == R.id.buttonSelect) {
 			select = state;
-			break;
-		case R.id.buttonStart:
+		} else if (buttonId == R.id.buttonStart) {
 			start = state;
-			break;
-
 		}
 	}
 
